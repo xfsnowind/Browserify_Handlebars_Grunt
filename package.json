@@ -26,9 +26,15 @@
   },
   "main": "index.html",
   "window": {
-    "toolbar": false,
-    "width": 660,
-    "height": 500
+    "title": "nodewebkit-app",
+    "show": true,
+    "toolbar": true,
+    "frame": true,
+    "position": "center",
+    "width": 1280,
+    "height": 720,
+    "min_width": 640,
+    "min_height": 360
   },
   "scripts": {
     "preinstall": "npm install -g grunt-cli",
