@@ -1,0 +1,6 @@
+node_modules/
+webkitbuilds/
+www/*.js
+www/*.css
+src/templateJS/*.js
+www/*.json
