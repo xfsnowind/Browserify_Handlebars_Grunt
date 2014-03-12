@@ -1,0 +1,53 @@
+@mixin backgroundImage ($filename) {
+    background-image: url("resources/images/" + $filename);
+}
+
+$firstCastleTop: 30px;
+$castleLeft: 0px;
+
+castleSize {
+    height: 105px;
+    width: 109px;
+}
+
+screenSize {
+    height: 480px;
+    width: 640px;
+}
+
+bunnySize {
+    height: 46px;
+    width: 64px;
+}
+
+body {
+    margin: 0;
+}
+
+#content {
+}
+
+#screen {
+    @extend screenSize;
+    @include backgroundImage("grass.png");
+    background-repeat: repeat;
+    z-index: auto;
+}
+
+#bunny {
+    @extend bunnySize;
+    @include backgroundImage("dude.png");
+    position: absolute;
+    left: 6em;
+    top: 6em;
+    z-index: 3;
+}
+
+div.castle {
+  @include backgroundImage("castle.png");
+  @extend castleSize;
+  position: relative;
+  left: $castleLeft;
+  top: $firstCastleTop;
+  z-index: 2;
+}

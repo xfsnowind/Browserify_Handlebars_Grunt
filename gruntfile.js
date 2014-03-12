@@ -3,13 +3,18 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
 
         browserify: {
-            commom: {
+            debug: {
                 src: ["src/**/*.js"],
                 dest: "www/main.js",
                 options: {
                     debug: true
                 }
+            },
+            release: {
+                src: ["src/**/*.js"],
+                dest: "www/main.js",
             }
+
         },
 
         sass: {
@@ -24,6 +29,12 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            resources: {
+                cwd: "src/",
+                expand: true,
+                src: ["resources/**/*"],
+                dest: "www/"
+            },
             package: {
                 src: "package.json",
                 dest: 'www/'
@@ -33,8 +44,8 @@ module.exports = function(grunt) {
         handlebarsify: {
             compile: {
                files: {
-                   "templateJS/template.js": "src/templates/template.hbs",
-                   "templateJS/partial.js": "src/templates/partial.hbs"
+                   // "templateJS/template.js": "src/templates/template.hbs",
+                   "templateJS/screen.js": "src/templates/screen.hbs"
                }
             },
         },
@@ -62,14 +73,14 @@ module.exports = function(grunt) {
             },
             src: {
                 files: "src/*.js",
-                tasks: ['browserify'],
+                tasks: ['browserify:debug'],
                 options: {
                     atBegin: true
                 }
             },
             templates: {
                 files: "src/templates/*.hbs",
-                tasks: ["handlebarsify", "browserify"]
+                tasks: ["handlebarsify", "browserify:debug"]
             },
             css: {
                 files: "css/*.scss",
@@ -78,7 +89,7 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            build: ["src/templateJS", "www/main.js", "www/main.css", "www/package.json"],
+            build: ["src/templateJS", "www/main.js", "www/main.css", "www/package.json", "www/resources"],
         },
 
         connect: {
@@ -99,7 +110,7 @@ module.exports = function(grunt) {
                 linux64: true,
                 keep_nw: true
             },
-            src: ["www/*"]
+            src: ["www/**/*"]
         }
     });
 
@@ -114,9 +125,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-node-webkit-builder");
 
         // Default task(s).
-    grunt.registerTask('check', ['jshint']);
+    grunt.registerTask('check', []);
     grunt.registerTask('build', ['sass', 'handlebarsify']);
-    grunt.registerTask('install', ["browserify"]);
-    grunt.registerTask('default', ["check", "build", "install", "connect", "watch"]);
-    grunt.registerTask("release", ["check", "build", "copy", "install", "nodewebkit"]);
+    grunt.registerTask('debug_install', ["browserify:debug", "copy:resources"]);
+    grunt.registerTask('release_install', ["browserify:release", "copy:package", "copy:resources"]);
+    grunt.registerTask('default', ["check", "build", "debug_install", "connect", "watch"]);
+    grunt.registerTask("release", ["check", "build", "release_install", "nodewebkit"]);
 };

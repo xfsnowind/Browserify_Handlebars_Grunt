@@ -1,3 +1,3 @@
-var client = require("./client");
+var paint = require("./paint");
 
-client.test();
+paint.init();

@@ -1,0 +1,11 @@
+Screen
+    1. The initialised size is 640*480px and can not be changed.
+
+Bunny
+    1. bunny can move through arrow key, but can not exceed the border of the screen, the number it moves 10px;
+    2. Bunny can rotate from degree 0 to 360, the degree to vertical is calculated by the angle to mouse;
+    3. Bunny can shoot the arrow with the current angle.
+
+
+Mouse
+    1. Generate the mice one by one in random position, but should not exceed the border of screen;

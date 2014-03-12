@@ -1,6 +1,7 @@
 {
   "name": "Browserify_Handlebars_Grunt",
   "version": "0.0.1",
+  "private": true,
   "devDependencies": {
     "grunt": "latest",
     "grunt-browserify": "latest",
@@ -27,14 +28,16 @@
   "main": "index.html",
   "window": {
     "title": "nodewebkit-app",
-    "show": true,
-    "toolbar": true,
-    "frame": true,
     "position": "center",
-    "width": 1280,
-    "height": 720,
+    "toolbar": true,
+    "show": true,
+    "frame": true,
+    "width": 640,
+    "height": 515,
     "min_width": 640,
-    "min_height": 360
+    "min_height": 515,
+    "max_width": 640,
+    "max_height": 515
   },
   "scripts": {
     "preinstall": "npm install -g grunt-cli",

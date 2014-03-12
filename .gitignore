@@ -4,3 +4,4 @@ www/*.js
 www/*.css
 templateJS/*.js
 www/*.json
+www/resources/
