@@ -9,11 +9,17 @@
     "grunt-contrib-connect": "latest",
     "grunt-contrib-clean": "latest",
     "grunt-contrib-sass": "latest",
+    "grunt-jslint": "latest",
+    "grunt-mocha": "latest",
+    "grunt-mocha-test": "latest",
+    "grunt-bump": "latest",
     "grunt-contrib-jshint": "latest",
     "grunt-handlebarsify": "latest",
     "grunt-node-webkit-builder": "latest",
     "grunt-contrib-copy": "latest",
-    "nodewebkit": "latest"
+    "nodewebkit": "latest",
+    "mocha": "latest",
+    "chai": "latest"
   },
   "dependencies": {
     "jquery": "latest",
