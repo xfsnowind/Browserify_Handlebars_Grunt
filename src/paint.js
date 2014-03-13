@@ -1,3 +1,5 @@
+/*global require, module*/
+// "use strict";
 var screenTemplate = require("../templateJS/screen"),
     handlebars = require("handlebars"),
     $ = require("jquery"),
@@ -19,4 +21,4 @@ function fillScreen() {
     fillHTML("#content", html);
 }
 
-module.exports.init= fillScreen;
+module.exports.init = fillScreen;

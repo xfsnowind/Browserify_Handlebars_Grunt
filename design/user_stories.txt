@@ -1,5 +1,6 @@
 Screen
-    1. The initialised size is 640*480px and can not be changed.
+    1. The initialised size is 640*480px and can not be changed, repeated by the grass image;
+    2. If lose the game, fill the screen with red and show the text "Lose game".
 
 Bunny
     1. bunny can move through arrow key, but can not exceed the border of the screen, the number it moves 10px;
@@ -9,3 +10,15 @@ Bunny
 
 Mouse
     1. Generate the mice one by one in random position, but should not exceed the border of screen;
+    2. Mouse move to left;
+    3. If mouse is shot by arrow, it will disappear.
+
+Castle
+    1. Display four castles in the screen, the top of first castle is 30px;
+    2. Display the health bar of castle on the left top of screen, the original state is full of color green;
+    3. If the castle is arrived (attacked) by mouse, the castle will lose some blood, which is indicated via its health bar is filled by red;
+    4. If castle loses all blood, lose the game.
+
+Score
+    1. The scores are shown on the right top of screen;
+    2. Succeeding in shooting a mouse adds 10 scores.

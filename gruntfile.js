@@ -10,11 +10,17 @@ module.exports = function(grunt) {
                     debug: true
                 }
             },
+            test: {
+                src: ["test/specs/*.js"],
+                dest: "test/test.main.js",
+                options: {
+                    debug: true
+                }
+            },
             release: {
                 src: ["src/**/*.js"],
                 dest: "www/main.js",
             }
-
         },
 
         sass: {
@@ -63,6 +69,24 @@ module.exports = function(grunt) {
             }
         },
 
+        jslint: {
+            default: {
+                src: [
+                    'src/*.js'
+                ]
+           },
+           ci: {
+                src: [
+                    'src/*.js',
+                    'test/**/*.js'
+                ],
+                // options: {
+                //     failOnError: false,
+                //     checkstyle: 'jslint.xml',
+                // }
+           }
+        },
+
         watch: {
             options: {
                 livereload: true
@@ -73,7 +97,7 @@ module.exports = function(grunt) {
             },
             src: {
                 files: "src/*.js",
-                tasks: ['browserify:debug'],
+                tasks: ['test', 'browserify:debug'],
                 options: {
                     atBegin: true
                 }
@@ -92,12 +116,41 @@ module.exports = function(grunt) {
             build: ["src/templateJS", "www/main.js", "www/main.css", "www/package.json", "www/resources"],
         },
 
+        mochaTest: {
+          test: {
+            options: {
+              reporter: 'spec'
+            },
+            src: ['test/specs/*.js']
+          }
+        },
+
+        mocha: {
+            default: {
+                options: {
+                    urls: [ 'http://localhost:9002/test/index.html' ]
+                }
+            },
+            ci: {
+                options: {
+                    // reporter: 'xunit-file',
+                    urls: [ 'http://localhost:9002/test/index.html' ]
+                }
+            }
+        },
+
         connect: {
             server: {
                 options: {
                     port: 9000,
                     base: "www"
                 }
+            // },
+            // test: {
+            //     options: {
+            //         port: 9002,
+            //         base: "."
+            //     }
             }
         },
 
@@ -119,16 +172,66 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-mocha');
+    grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks("grunt-contrib-sass");
     grunt.loadNpmTasks("grunt-handlebarsify");
     grunt.loadNpmTasks("grunt-node-webkit-builder");
 
         // Default task(s).
-    grunt.registerTask('check', []);
-    grunt.registerTask('build', ['sass', 'handlebarsify']);
-    grunt.registerTask('debug_install', ["browserify:debug", "copy:resources"]);
-    grunt.registerTask('release_install', ["browserify:release", "copy:package", "copy:resources"]);
-    grunt.registerTask('default', ["check", "build", "debug_install", "connect", "watch"]);
-    grunt.registerTask("release", ["check", "build", "release_install", "nodewebkit"]);
+    grunt.registerTask('check', [
+        // "jshint",
+        // "jslint"
+    ]);
+
+    grunt.registerTask('test', [
+        'check',
+        'build',
+        'browserify:debug',
+        'browserify:test',
+        'mochaTest',
+        // 'connect:test',
+        // 'mocha:default'
+    ]);
+
+    grunt.registerTask('test_part', [
+        'connect:test',
+        'browserify:test',
+        'mocha:default'
+    ]);
+
+    grunt.registerTask('build', [
+        'sass',
+        'handlebarsify'
+    ]);
+
+    grunt.registerTask('build_for_debug', [
+        "browserify:debug",
+        "copy:resources"
+    ]);
+
+    grunt.registerTask('build_for_release', [
+        "browserify:release",
+        "copy"
+    ]);
+
+
+    grunt.registerTask('default', [
+        "check",
+        "build",
+        "build_for_debug",
+        "test_part",
+        "connect:server",
+        "watch"
+    ]);
+
+    grunt.registerTask("release", [
+        "check",
+        "build",
+        "build_for_release",
+        "test_part",
+        "nodewebkit"
+    ]);
 };
