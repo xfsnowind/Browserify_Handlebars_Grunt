@@ -5,3 +5,4 @@ www/*.css
 templateJS/*.js
 www/*.json
 www/resources/
+test/*.js

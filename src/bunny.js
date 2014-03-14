@@ -3,28 +3,49 @@
 'use strict';
 var $ = require("jquery"),
     common = require("./common"),
-    moveDistance = 10;
+    moveDistance = require("./settings.js").bunnyMoveDistance;
 
 function getBunny() {
     return $("#bunny");
 }
 
+function getBunnyPosition(bunny) {
+    var bunnyPostion = {
+        left: parseInt(bunny.css('left')),
+        top: parseInt(bunny.css('top'))
+    };
+    return {
+        37: {
+                left: bunnyPostion.left - moveDistance,
+                top: bunnyPostion.top
+            },
+        38: {
+                left: bunnyPostion.left,
+                top: bunnyPostion.top - moveDistance
+            },
+        39: {
+                left: bunnyPostion.left + moveDistance,
+                top: bunnyPostion.top
+            },
+        40: {
+                left: bunnyPostion.left,
+                top: bunnyPostion.top + moveDistance
+            }
+    };
+}
+
 function registerKeyEvents() {
-    var bunny = getBunny(),
-        keyMovementMap = {
-            37: common.moveTarget(bunny, {
-                    left: (0 - moveDistance)
-                }),
-            38: common.moveTarget(bunny, "up", moveDistance),
-            39: common.moveTarget(bunny, "right", moveDistance),
-            40: common.moveTarget(bunny, "down", moveDistance)
-        };
-    $.keydown(function (event) {
+    $(document).bind("keydown",function (event) {
+        var bunny = getBunny(),
+            keyMovementMap = getBunnyPosition(bunny);
         if (13 === event.keyCode) {
             event.preventDefault();
-        } else {
-            keyMovementMap[event.keyCode]();
+        } else if (keyMovementMap[event.keyCode.toString()]) {
+            common.moveTarget.apply(null, [bunny, keyMovementMap[event.keyCode.toString()]]);
         }
     });
 }
 
+module.exports = {
+    registerKeyEvents: registerKeyEvents
+};
