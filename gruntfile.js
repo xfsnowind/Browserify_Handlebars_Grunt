@@ -70,15 +70,9 @@ module.exports = function(grunt) {
         },
 
         jslint: {
-            default: {
-                src: [
-                    'src/*.js'
-                ]
-           },
            ci: {
                 src: [
-                    'src/*.js',
-                    'test/**/*.js'
+                    'src/*.js'
                 ],
                 // options: {
                 //     failOnError: false,
@@ -182,8 +176,8 @@ module.exports = function(grunt) {
 
         // Default task(s).
     grunt.registerTask('check', [
-        // "jshint",
-        // "jslint"
+        "jshint",
+        "jslint"
     ]);
 
     grunt.registerTask('test', [

@@ -1,3 +1,4 @@
+/*global require, module*/
 module.exports =  {
     screenSize: {
         height: 480,

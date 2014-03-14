@@ -1,5 +1,6 @@
 /*global require, module*/
-// "use strict";
+/*jslint node: true */
+"use strict";
 var screenTemplate = require("../templateJS/screen"),
     handlebars = require("handlebars"),
     $ = require("jquery"),
