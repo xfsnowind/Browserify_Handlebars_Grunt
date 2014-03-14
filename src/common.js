@@ -25,11 +25,17 @@ var lodash = require("lodash"),
             target.css(newCssStyle);
         },
 
-        rotateTarget: function (target, degree) {
-           // For webkit browsers: e.g. Chrome
-            target.css({'WebkitTransform': 'rotate(' + degree + 'deg)'});
-           // For Mozilla browser: e.g. Firefox
-            target.css({'-moz-transform': 'rotate(' + degree + 'deg)'});
+        rotateTarget: function (target, degrees) {
+            target.css({
+            // For webkit browsers: e.g. Chrome
+                '-webkit-transform' : 'rotate('  +  degrees  +  'deg)',
+            // For Mozilla browser: e.g. Firefox
+                '-moz-transform' : 'rotate(' + degrees + 'deg)',
+                '-ms-transform' : 'rotate(' + degrees + 'deg)',
+                '-o-transform' : 'rotate(' + degrees + 'deg)',
+                'transform' : 'rotate(' + degrees + 'deg)',
+                'zoom' : 1
+            });
         }
     };
 

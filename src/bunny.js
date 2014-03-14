@@ -3,7 +3,8 @@
 'use strict';
 var $ = require("jquery"),
     common = require("./common"),
-    moveDistance = require("./settings.js").bunnyMoveDistance;
+    moveDistance = require("./settings.js").bunnyMoveDistance,
+    bunnySize = require("./settings.js").bunnySize;
 
 function getBunny() {
     return $("#bunny");
@@ -35,7 +36,7 @@ function getBunnyPosition(bunny) {
 }
 
 function registerKeyEvents() {
-    $(document).bind("keydown", function (event) {
+    $(document).on("keydown", function (event) {
         var bunny = getBunny(),
             keyMovementMap = getBunnyPosition(bunny);
         if (13 === event.keyCode) {
@@ -46,12 +47,26 @@ function registerKeyEvents() {
     });
 }
 
+function calculateDegreeMouseWithBunny(mouseevent, bunnyCenterPoint) {
+    return Math.atan2((mouseevent.pageY - bunnyCenterPoint.top), (mouseevent.pageX - bunnyCenterPoint.left)) * 180 / Math.PI;
+}
+
 function registerMouseRotateEvents() {
-    $(document).bind("mousemove", function (event) {
-        console.log(event);
+    $(document).on("mousemove", function (event) {
+        var bunny = getBunny(),
+            bunnyPostion = {
+                left: parseInt(bunny.css('left'), 10),
+                top: parseInt(bunny.css('top'), 10)
+            },
+            degree = calculateDegreeMouseWithBunny(event, {
+                left: bunnyPostion.left + bunnySize.width / 2,
+                top: bunnyPostion.top + bunnySize.height / 2
+            });
+        common.rotateTarget(bunny, degree);
     });
 }
 
 module.exports = {
-    registerKeyEvents: registerKeyEvents
+    registerKeyEvents: registerKeyEvents,
+    registerMouseRotateEvents: registerMouseRotateEvents
 };

@@ -6,3 +6,4 @@ var paint = require("./paint"),
 
 paint.init();
 bunny.registerKeyEvents();
+bunny.registerMouseRotateEvents();

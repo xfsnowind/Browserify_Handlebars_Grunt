@@ -180,16 +180,6 @@ module.exports = function(grunt) {
         "jslint"
     ]);
 
-    grunt.registerTask('test', [
-        'check',
-        'build',
-        'browserify:debug',
-        'browserify:test',
-        'mochaTest',
-        // 'connect:test',
-        // 'mocha:default'
-    ]);
-
     grunt.registerTask('test_part', [
         // 'connect:test',
         'mochaTest',
@@ -212,6 +202,15 @@ module.exports = function(grunt) {
         "copy"
     ]);
 
+    grunt.registerTask('test', [
+        'check',
+        'build',
+        'browserify:debug',
+        'browserify:test',
+        'mochaTest',
+        // 'connect:test',
+        // 'mocha:default'
+    ]);
 
     grunt.registerTask('default', [
         "check",
