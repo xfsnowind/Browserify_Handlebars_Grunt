@@ -1,8 +1,8 @@
 node_modules/
 webkitbuilds/
+test/*.js
 www/*.js
 www/*.css
 templateJS/*.js
 www/*.json
 www/resources/
-test/*.js

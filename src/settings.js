@@ -1,5 +1,11 @@
 module.exports =  {
-    screenHeight: 640,
-    screenWidth: 480,
+    screenSize: {
+        height: 480,
+        width: 640
+    },
+    bunnySize: {
+        height: 46,
+        width: 64
+    },
     bunnyMoveDistance: 5
 };

@@ -12,7 +12,7 @@ module.exports = function(grunt) {
             },
             test: {
                 src: ["test/specs/*.js"],
-                dest: "test/test.main.js",
+                dest: "test/testmain.js",
                 options: {
                     debug: true
                 }
@@ -113,7 +113,7 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            build: ["src/templateJS", "www/main.js", "www/main.css", "www/package.json", "www/resources"],
+            build: ["src/templateJS", "www/main.js", "www/main.css", "www/package.json", "www/resources", "test/*.js"],
         },
 
         mochaTest: {
