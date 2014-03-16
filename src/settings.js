@@ -8,5 +8,10 @@ module.exports =  {
         height: 46,
         width: 64
     },
-    bunnyMoveDistance: 5
+    bunnyMoveSpeed: 5,
+    arrowSize: {
+        width: 42,
+        height: 10
+    },
+    arrowSpeed: 10
 };

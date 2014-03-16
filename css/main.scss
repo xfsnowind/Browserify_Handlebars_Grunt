@@ -20,6 +20,11 @@ bunnySize {
     width: 64px;
 }
 
+arrowSize {
+    height: 10px;
+    width: 42px
+}
+
 body {
     margin: 0;
 }
@@ -49,5 +54,12 @@ div.castle {
   position: relative;
   left: $castleLeft;
   top: $firstCastleTop;
+  z-index: 2;
+}
+
+div[id^='arrow-'] {
+  @include backgroundImage("bullet.png");
+  @extend arrowSize;
+  position: absolute;
   z-index: 2;
 }
