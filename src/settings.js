@@ -13,5 +13,6 @@ module.exports =  {
         width: 42,
         height: 10
     },
-    arrowSpeed: 10
+    arrowSpeed: 10,
+    arrowMoveInterval: 100
 };

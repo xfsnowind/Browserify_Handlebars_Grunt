@@ -4,6 +4,8 @@
 var lodash = require("lodash"),
     screenSize = require("./settings.js").screenSize,
     bunnySize = require("./settings.js").bunnySize,
+    arrowSize = require("./settings.js").arrowSize,
+    arrowMoveInterval = require("./settings.js").arrowMoveInterval,
     externalFuncs = {
         moveTarget: function (target, newPostion) {
             var newCssStyle = lodash.clone(newPostion);
@@ -40,8 +42,23 @@ var lodash = require("lodash"),
         },
 
         reachBounds: function (position, properties) {
-            var leftOfArrowHead = position.left + Math.cos(properties.degree) * properties.speed,
+            //here the degree is supposed to be radians, not degree
+            var leftOfArrowHead,
+                topOfArrowHead;
+            if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
+                leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) +  + Math.sin(properties.degree) * arrowSize.height;
+                topOfArrowHead = position.top + Math.sin(properties.degree) * arrowSize.width + Math.cos(properties.degree) * arrowSize.height;
+            } else if (properties.degree <= 0 && properties.degree > -Math.PI / 2) {
+                leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) + Math.sin(properties.degree) * arrowSize.height;
                 topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+            } else if (properties.degree <= -Math.PI / 2) {
+                leftOfArrowHead = position.left;
+                topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+            } else if (properties.degree > Math.PI / 2) {
+                leftOfArrowHead = position.left;
+                topOfArrowHead = position.top + Math.sin(properties.degree) * arrowSize.width + Math.cos(properties.degree) * arrowSize.height;
+            }
+
             if (leftOfArrowHead <= 0 || leftOfArrowHead >= screenSize.width || topOfArrowHead <= 0 || topOfArrowHead >= screenSize.height) {
                 return true;
             }
@@ -74,7 +91,7 @@ var lodash = require("lodash"),
             this.rotateTarget(target, properties.degree * 180 / Math.PI);
             setTimeout(function () {
                 externalFuncs.moveArrow(target, newCssStyle, properties);
-            }, 20);
+            }, arrowMoveInterval);
         }
     };
 

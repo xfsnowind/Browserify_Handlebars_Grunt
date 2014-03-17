@@ -3,7 +3,7 @@
 'use strict';
 var $ = require("jquery"),
     common = require("./common"),
-    bunnySpeed = require("./settings.js").moveBunnySpeed,
+    bunnySpeed = require("./settings.js").bunnyMoveSpeed,
     bunnySize = require("./settings.js").bunnySize,
     arrowSpeed = require("./settings.js").arrowSpeed,
     arrowNumber = 0,
@@ -52,8 +52,10 @@ function registerKeyEvents() {
 
 
 //the angle it returns is represented in degrees given in 180, not radians
-function calculateDegreeMouseWithBunny(event, bunnyCenterPoint) {
-    return Math.atan2((event.pageY - bunnyCenterPoint.top), (event.pageX - bunnyCenterPoint.left)) * 180 / Math.PI;
+//This is originaly for css animate "rotate", it use degree, but for javascript  Math object,
+//it's supposed to use radians
+function calculateDegreeMouseWithBunny(event, bunnyCenterPosition) {
+    return Math.atan2((event.pageY - bunnyCenterPosition.top), (event.pageX - bunnyCenterPosition.left)) * 180 / Math.PI;
 }
 
 function generateNewArrowNumber() {
@@ -75,31 +77,31 @@ function generateArrow() {
 function registerMouseRotateEvents() {
     $(document).on("mousemove", function (event) {
         var bunny = getBunny(),
-            bunnyPostion = {
-                left: parseInt(bunny.css('left'), 10),
-                top: parseInt(bunny.css('top'), 10)
+            bunnyCenterPosition = {
+                left: parseInt(bunny.css('left'), 10) + bunnySize.width / 2,
+                top: parseInt(bunny.css('top'), 10) + bunnySize.height / 2
             },
             degree = calculateDegreeMouseWithBunny(event, {
-                left: bunnyPostion.left + bunnySize.width / 2,
-                top: bunnyPostion.top + bunnySize.height / 2
+                left: bunnyCenterPosition.left,
+                top: bunnyCenterPosition.top
             });
         common.rotateTarget(bunny, degree);
     });
 
     $(document).on("click", function (event) {
         var bunny = getBunny(),
-            bunnyPostion = {
-                left: parseInt(bunny.css('left'), 10),
-                top: parseInt(bunny.css('top'), 10)
+            bunnyCenterPosition = {
+                left: parseInt(bunny.css('left'), 10) + bunnySize.width / 2,
+                top: parseInt(bunny.css('top'), 10) + bunnySize.height / 2
             },
             arrowDegree = calculateDegreeMouseWithBunny(event, {
-                left: bunnyPostion.left + bunnySize.width / 2,
-                top: bunnyPostion.top + bunnySize.height / 2
+                left: bunnyCenterPosition.left,
+                top: bunnyCenterPosition.top
             }),
             arrow = generateArrow();
         common.moveArrow(arrow, {
-            left: bunny.css("left"),
-            top: bunny.css("top")
+            left: bunnyCenterPosition.left,
+            top: bunnyCenterPosition.top
         }, {
             degree: arrowDegree / 180 * Math.PI,
             speed: arrowSpeed
