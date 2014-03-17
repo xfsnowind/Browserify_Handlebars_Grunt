@@ -1,7 +1,7 @@
 /*global require, module*/
 /*jslint node: true */
 "use strict";
-var screenTemplate = require("../templateJS/screen"),
+var screenTemplate = require("./templateJS/screen"),
     handlebars = require("handlebars"),
     $ = require("jquery"),
     lodash = require("lodash"),

@@ -39,11 +39,11 @@
     "show": true,
     "frame": true,
     "width": 640,
-    "height": 515,
+    "height": 518,
     "min_width": 640,
-    "min_height": 515,
+    "min_height": 518,
     "max_width": 640,
-    "max_height": 515
+    "max_height": 518
   },
   "scripts": {
     "preinstall": "npm install -g grunt-cli",

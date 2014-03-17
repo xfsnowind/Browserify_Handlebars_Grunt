@@ -44,14 +44,19 @@ module.exports = function(grunt) {
             package: {
                 src: "package.json",
                 dest: 'www/'
+            // },
+            // release: {
+            //     cwd: "webkitbuilds/releases/nodewebkitapp/",
+            //     expand: true,
+            //     src: ["**/*"],
+            //     dest: "bin/"
             }
         },
 
         handlebarsify: {
             compile: {
                files: {
-                   // "templateJS/template.js": "src/templates/template.hbs",
-                   "templateJS/screen.js": "src/templates/screen.hbs"
+                   "src/templateJS/screen.js": "src/templates/screen.hbs"
                }
             },
         },
@@ -107,7 +112,9 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            build: ["src/templateJS", "www/main.js", "www/main.css", "www/package.json", "www/resources", "test/*.js"],
+            build: ["src/templateJS/", "www/main.js", "www/main.css", "www/package.json", "www/resources"],
+            test: ["test/*.js"],
+            release: ["webkitbuilds"]
         },
 
         mochaTest: {
@@ -155,6 +162,7 @@ module.exports = function(grunt) {
                 win: true,
                 mac: true,
                 linux64: true,
+                linux32: true,
                 keep_nw: true
             },
             src: ["www/**/*"]
@@ -174,7 +182,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks("grunt-handlebarsify");
     grunt.loadNpmTasks("grunt-node-webkit-builder");
 
-        // Default task(s).
+    // Default task(s).
     grunt.registerTask('check', [
         "jshint",
         "jslint"
@@ -199,7 +207,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('build_for_release', [
         "browserify:release",
-        "copy"
+        "copy:package"
     ]);
 
     grunt.registerTask('test', [
@@ -226,6 +234,7 @@ module.exports = function(grunt) {
         "build",
         "build_for_release",
         "test_part",
-        "nodewebkit"
+        "nodewebkit",
+        "copy:release"
     ]);
 };

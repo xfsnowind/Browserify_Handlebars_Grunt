@@ -46,7 +46,7 @@ var lodash = require("lodash"),
             var leftOfArrowHead,
                 topOfArrowHead;
             if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
-                leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) +  + Math.sin(properties.degree) * arrowSize.height;
+                leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) + Math.sin(properties.degree) * arrowSize.height;
                 topOfArrowHead = position.top + Math.sin(properties.degree) * arrowSize.width + Math.cos(properties.degree) * arrowSize.height;
             } else if (properties.degree <= 0 && properties.degree > -Math.PI / 2) {
                 leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) + Math.sin(properties.degree) * arrowSize.height;
