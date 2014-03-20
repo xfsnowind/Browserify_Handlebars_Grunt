@@ -15,6 +15,7 @@ module.exports =  {
         width: 42,
         height: 10
     },
+    /*the speed of arrow will be arrowSpeed * arrowMoveInterval*/
     arrowSpeed: 10,
     arrowMoveInterval: 20,
 
@@ -22,6 +23,9 @@ module.exports =  {
         width: 64,
         height: 29
     },
-    mouseSpeed: 50,
-    mouseChangeImageInterval: 600
+    /*the speed of mouse will be mouseSpeed * mouseMoveInterval*/
+    mouseSpeed: 10,
+    mouseMoveInterval: 60,
+    mouseChangeImageInterval: 600,
+    mouseGenerateInterval: 1000
 };

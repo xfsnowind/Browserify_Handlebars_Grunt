@@ -2,10 +2,13 @@
 /*jslint node: true*/
 'use strict';
 var $ = require("jquery"),
+    lodash = require("lodash"),
     common = require("./common"),
     settings = require("./settings.js"),
-    arrowNumber = 0,
-    bunnyNamesArray = ["", "2"];
+    bunnyNamesArray = ["", "2"],
+    arrowNumber = {
+        number: 0
+    };
 
 function getBunny() {
     return $("#bunny");
@@ -34,6 +37,59 @@ function getBunnyPosition(bunny) {
             top: bunnyPostion.top + settings.bunnyMoveSpeed
         }
     };
+}
+
+function reachBounds(position, properties) {
+    //here the degree is supposed to be radians, not degree
+    var leftOfArrowHead,
+        topOfArrowHead;
+    if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
+        leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
+    } else if (properties.degree <= 0 && properties.degree > -Math.PI / 2) {
+        leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+    } else if (properties.degree <= -Math.PI / 2) {
+        leftOfArrowHead = position.left;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+    } else if (properties.degree > Math.PI / 2) {
+        leftOfArrowHead = position.left;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
+    }
+
+    if (leftOfArrowHead <= 0 || leftOfArrowHead >= settings.screenSize.width || topOfArrowHead <= 0 || topOfArrowHead >= settings.screenSize.height) {
+        return true;
+    }
+    return false;
+}
+
+function moveArrow(target, position, properties) {
+    var moveX = Math.cos(properties.degree) * properties.speed,
+        moveY = Math.sin(properties.degree) * properties.speed,
+        newCssStyle = {
+            left: parseInt(position.left, 10),
+            top: parseInt(position.top, 10)
+        };
+
+    if (reachBounds(newCssStyle, properties)) {
+        target.remove();
+        return;
+    }
+
+    newCssStyle = lodash.mapValues(newCssStyle, function (value, key) {
+        if ("left" === key) {
+            return value + moveX + "px";
+        }
+
+        if ("top" === key) {
+            return value + moveY + "px";
+        }
+    });
+    target.css(newCssStyle);
+    common.rotateTarget(target, properties.degree * 180 / Math.PI);
+    setTimeout(function () {
+        moveArrow(target, newCssStyle, properties);
+    }, settings.arrowMoveInterval);
 }
 
 function registerKeyEvents() {
@@ -89,7 +145,7 @@ function registerMouseRotateEvents() {
             }),
             arrow = common.generateNewTarget("arrow", arrowNumber);
         // changeImage(bunny);
-        common.moveArrow(arrow, {
+        moveArrow(arrow, {
             left: bunnyCenterPosition.left,
             top: bunnyCenterPosition.top
         }, {
