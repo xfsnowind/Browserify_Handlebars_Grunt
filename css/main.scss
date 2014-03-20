@@ -25,6 +25,11 @@ arrowSize {
     width: 42px
 }
 
+mouseSize {
+    height: 29px;
+    width: 64px
+}
+
 body {
     margin: 0;
 }
@@ -60,6 +65,13 @@ div.castle {
 div[id^='arrow-'] {
   @include backgroundImage("bullet.png");
   @extend arrowSize;
+  position: absolute;
+  z-index: 2;
+}
+
+div[id^='mouse'] {
+  @include backgroundImage("badguy.png");
+  @extend mouseSize;
   position: absolute;
   z-index: 2;
 }

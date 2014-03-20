@@ -114,7 +114,7 @@ module.exports = function(grunt) {
         clean: {
             build: ["src/templateJS/", "www/main.js", "www/main.css", "www/package.json", "www/resources"],
             test: ["test/*.js"],
-            release: ["webkitbuilds"]
+            release: ["webkitbuilds/releases"]
         },
 
         mochaTest: {
@@ -235,6 +235,6 @@ module.exports = function(grunt) {
         "build_for_release",
         "test_part",
         "nodewebkit",
-        "copy:release"
+        // "copy:release"
     ]);
 };

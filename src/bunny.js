@@ -3,11 +3,9 @@
 'use strict';
 var $ = require("jquery"),
     common = require("./common"),
-    bunnySpeed = require("./settings.js").bunnyMoveSpeed,
-    bunnySize = require("./settings.js").bunnySize,
-    arrowSpeed = require("./settings.js").arrowSpeed,
+    settings = require("./settings.js"),
     arrowNumber = 0,
-    arrowMax = 10000;
+    bunnyNamesArray = ["", "2"];
 
 function getBunny() {
     return $("#bunny");
@@ -20,20 +18,20 @@ function getBunnyPosition(bunny) {
     };
     return {
         37: {
-            left: bunnyPostion.left - bunnySpeed,
+            left: bunnyPostion.left - settings.bunnyMoveSpeed,
             top: bunnyPostion.top
         },
         38: {
             left: bunnyPostion.left,
-            top: bunnyPostion.top - bunnySpeed
+            top: bunnyPostion.top - settings.bunnyMoveSpeed
         },
         39: {
-            left: bunnyPostion.left + bunnySpeed,
+            left: bunnyPostion.left + settings.bunnyMoveSpeed,
             top: bunnyPostion.top
         },
         40: {
             left: bunnyPostion.left,
-            top: bunnyPostion.top + bunnySpeed
+            top: bunnyPostion.top + settings.bunnyMoveSpeed
         }
     };
 }
@@ -50,6 +48,13 @@ function registerKeyEvents() {
     });
 }
 
+function changeImage(target) {
+    target.css("background-image", 'url("resources/images/dude2.png")');
+    setTimeout(function () {
+        target.css("background-image", 'url("resources/images/dude.png")');
+    }, 200);
+}
+
 
 //the angle it returns is represented in degrees given in 180, not radians
 //This is originaly for css animate "rotate", it use degree, but for javascript  Math object,
@@ -58,28 +63,12 @@ function calculateDegreeMouseWithBunny(event, bunnyCenterPosition) {
     return Math.atan2((event.pageY - bunnyCenterPosition.top), (event.pageX - bunnyCenterPosition.left)) * 180 / Math.PI;
 }
 
-function generateNewArrowNumber() {
-    if (arrowNumber >= arrowMax) {
-        arrowNumber = 0;
-    }
-    return arrowNumber + 1;
-}
-
-function generateArrow() {
-    var screen = $("#screen"),
-        uniqueArrowId = generateNewArrowNumber().toString(),
-        newArrow = $("<div></div>").attr("id", "arrow-" + uniqueArrowId);
-
-    screen.append(newArrow);
-    return newArrow;
-}
-
 function registerMouseRotateEvents() {
     $(document).on("mousemove", function (event) {
         var bunny = getBunny(),
             bunnyCenterPosition = {
-                left: parseInt(bunny.css('left'), 10) + bunnySize.width / 2,
-                top: parseInt(bunny.css('top'), 10) + bunnySize.height / 2
+                left: parseInt(bunny.css('left'), 10) + settings.bunnySize.width / 2,
+                top: parseInt(bunny.css('top'), 10) + settings.bunnySize.height / 2
             },
             degree = calculateDegreeMouseWithBunny(event, {
                 left: bunnyCenterPosition.left,
@@ -91,20 +80,21 @@ function registerMouseRotateEvents() {
     $(document).on("click", function (event) {
         var bunny = getBunny(),
             bunnyCenterPosition = {
-                left: parseInt(bunny.css('left'), 10) + bunnySize.width / 2,
-                top: parseInt(bunny.css('top'), 10) + bunnySize.height / 2
+                left: parseInt(bunny.css('left'), 10) + settings.bunnySize.width / 2,
+                top: parseInt(bunny.css('top'), 10) + settings.bunnySize.height / 2
             },
             arrowDegree = calculateDegreeMouseWithBunny(event, {
                 left: bunnyCenterPosition.left,
                 top: bunnyCenterPosition.top
             }),
-            arrow = generateArrow();
+            arrow = common.generateNewTarget("arrow", arrowNumber);
+        // changeImage(bunny);
         common.moveArrow(arrow, {
             left: bunnyCenterPosition.left,
             top: bunnyCenterPosition.top
         }, {
             degree: arrowDegree / 180 * Math.PI,
-            speed: arrowSpeed
+            speed: settings.arrowSpeed
         });
     });
 }

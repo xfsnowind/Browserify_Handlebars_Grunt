@@ -2,23 +2,22 @@
 /*jslint node: true */
 "use strict";
 var lodash = require("lodash"),
-    screenSize = require("./settings.js").screenSize,
-    bunnySize = require("./settings.js").bunnySize,
-    arrowSize = require("./settings.js").arrowSize,
-    arrowMoveInterval = require("./settings.js").arrowMoveInterval,
+    $ = require("jquery"),
+    settings = require("./settings.js"),
+    maxNumber = 10000,
     externalFuncs = {
         moveTarget: function (target, newPostion) {
             var newCssStyle = lodash.clone(newPostion);
             if (newPostion.left <= 0) {
                 newCssStyle.left = 0;
-            } else if (newPostion.left >= screenSize.width - bunnySize.width) {
-                newCssStyle.left = screenSize.width - bunnySize.width;
+            } else if (newPostion.left >= settings.screenSize.width - settings.bunnySize.width) {
+                newCssStyle.left = settings.screenSize.width - settings.bunnySize.width;
             }
 
             if (newPostion.top <= 0) {
                 newCssStyle.top = 0;
-            } else if (newPostion.top >= screenSize.height - bunnySize.height) {
-                newCssStyle.top = screenSize.height - bunnySize.height;
+            } else if (newPostion.top >= settings.screenSize.height - settings.bunnySize.height) {
+                newCssStyle.top = settings.screenSize.height - settings.bunnySize.height;
             }
 
             newCssStyle = lodash.mapValues(newCssStyle, function (value) {
@@ -46,20 +45,20 @@ var lodash = require("lodash"),
             var leftOfArrowHead,
                 topOfArrowHead;
             if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
-                leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) + Math.sin(properties.degree) * arrowSize.height;
-                topOfArrowHead = position.top + Math.sin(properties.degree) * arrowSize.width + Math.cos(properties.degree) * arrowSize.height;
+                leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+                topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
             } else if (properties.degree <= 0 && properties.degree > -Math.PI / 2) {
-                leftOfArrowHead = position.left + Math.cos(properties.degree) * (arrowSize.width + properties.speed) + Math.sin(properties.degree) * arrowSize.height;
+                leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
                 topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
             } else if (properties.degree <= -Math.PI / 2) {
                 leftOfArrowHead = position.left;
                 topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
             } else if (properties.degree > Math.PI / 2) {
                 leftOfArrowHead = position.left;
-                topOfArrowHead = position.top + Math.sin(properties.degree) * arrowSize.width + Math.cos(properties.degree) * arrowSize.height;
+                topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
             }
 
-            if (leftOfArrowHead <= 0 || leftOfArrowHead >= screenSize.width || topOfArrowHead <= 0 || topOfArrowHead >= screenSize.height) {
+            if (leftOfArrowHead <= 0 || leftOfArrowHead >= settings.screenSize.width || topOfArrowHead <= 0 || topOfArrowHead >= settings.screenSize.height) {
                 return true;
             }
             return false;
@@ -91,7 +90,24 @@ var lodash = require("lodash"),
             this.rotateTarget(target, properties.degree * 180 / Math.PI);
             setTimeout(function () {
                 externalFuncs.moveArrow(target, newCssStyle, properties);
-            }, arrowMoveInterval);
+            }, settings.arrowMoveInterval);
+        },
+
+
+        generanteNewNumber: function (number) {
+            if (number >= maxNumber) {
+                number = 0;
+            }
+
+            return number + 1;
+        },
+
+        generateNewTarget: function (targetName, number) {
+            var screen = $("#screen"),
+                uniqueId = externalFuncs.generanteNewNumber(number).toString(),
+                newTarget = $("<div></div>").attr("id", targetName + "-" + uniqueId);
+            screen.append(newTarget);
+            return newTarget;
         }
     };
 

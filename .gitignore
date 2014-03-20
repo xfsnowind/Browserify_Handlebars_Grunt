@@ -3,6 +3,6 @@ webkitbuilds/
 test/*.js
 www/*.js
 www/*.css
-templateJS/*.js
+src/templateJS/*.js
 www/*.json
 www/resources/
