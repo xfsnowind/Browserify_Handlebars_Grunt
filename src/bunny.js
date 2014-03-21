@@ -63,13 +63,51 @@ function reachBounds(position, properties) {
     return false;
 }
 
+function shotMouse(position, properties) {
+    var leftOfArrowHead,
+        topOfArrowHead,
+        mouse = false,
+        mouses = $("div[id^='mouse-']");
+
+    if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
+        leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
+    } else if (properties.degree <= 0 && properties.degree > -Math.PI / 2) {
+        leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+    } else if (properties.degree <= -Math.PI / 2) {
+        leftOfArrowHead = position.left;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+    } else if (properties.degree > Math.PI / 2) {
+        leftOfArrowHead = position.left;
+        topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
+    }
+
+    $(mouses).each(function () {
+        var elem = $(this),
+            offset = elem.offset();
+        if (leftOfArrowHead >= offset.left && leftOfArrowHead <= offset.left + elem.outerWidth() && topOfArrowHead >= offset.top && topOfArrowHead <= offset.top + elem.outerHeight()) {
+            mouse = $(this);
+        }
+    });
+
+    return mouse;
+}
+
 function moveArrow(target, position, properties) {
     var moveX = Math.cos(properties.degree) * properties.speed,
         moveY = Math.sin(properties.degree) * properties.speed,
         newCssStyle = {
             left: parseInt(position.left, 10),
             top: parseInt(position.top, 10)
-        };
+        },
+        mouse = shotMouse(newCssStyle, properties);
+
+    if (mouse) {
+        mouse.remove();
+        target.remove();
+        return;
+    }
 
     if (reachBounds(newCssStyle, properties)) {
         target.remove();

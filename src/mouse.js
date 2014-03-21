@@ -15,17 +15,12 @@ function reachCastle(position) {
     return false;
 }
 
-function shotByArrow(position) {
-    console.log(position);
-    return false;
-}
-
 function moveMouse(target, position) {
     var newCssStyle = {
             left: parseInt(position.left, 10),
             top: parseInt(position.top, 10)
         };
-    if (reachCastle(newCssStyle) || shotByArrow(newCssStyle)) {
+    if (reachCastle(newCssStyle)) {
         target.remove();
         return;
     }
