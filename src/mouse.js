@@ -9,7 +9,7 @@ var $ = require("jquery"),
 function reachCastle(position) {
     var leftOfArrowHead = position.left;
 
-    if (leftOfArrowHead <= 64) {
+    if (leftOfArrowHead <= settings.castleSize.width / 2) {
         return true;
     }
     return false;

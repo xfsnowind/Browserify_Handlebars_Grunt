@@ -53,6 +53,13 @@ body {
     z-index: 3;
 }
 
+#score {
+    top: 10px;
+    left: 500px;
+    position: absolute;
+    z-index: 3;
+}
+
 div.castle {
   @include backgroundImage("castle.png");
   @extend castleSize;

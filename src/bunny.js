@@ -5,6 +5,7 @@ var $ = require("jquery"),
     lodash = require("lodash"),
     common = require("./common"),
     settings = require("./settings.js"),
+    screen = require("./screen"),
     bunnyNamesArray = ["", "2"],
     arrowNumber = {
         number: 0
@@ -66,27 +67,44 @@ function reachBounds(position, properties) {
 function shotMouse(position, properties) {
     var leftOfArrowHead,
         topOfArrowHead,
+        leftOfArrowCenter,
+        topOfArrowCenter,
         mouse = false,
         mouses = $("div[id^='mouse-']");
 
     if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
         leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+        leftOfArrowCenter = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) / 2 + Math.sin(properties.degree) * settings.arrowSize.height;
         topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
+        topOfArrowCenter = position.top + Math.sin(properties.degree) * settings.arrowSize.width / 2 + Math.cos(properties.degree) * settings.arrowSize.height;
     } else if (properties.degree <= 0 && properties.degree > -Math.PI / 2) {
         leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
+        leftOfArrowCenter = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) / 2 + Math.sin(properties.degree) * settings.arrowSize.height;
         topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+        topOfArrowCenter = position.top + Math.sin(properties.degree) * properties.speed / 2;
     } else if (properties.degree <= -Math.PI / 2) {
         leftOfArrowHead = position.left;
+        leftOfArrowCenter = position.left / 2;
         topOfArrowHead = position.top + Math.sin(properties.degree) * properties.speed;
+        topOfArrowCenter = position.top / 2 + Math.sin(properties.degree) * properties.speed;
     } else if (properties.degree > Math.PI / 2) {
         leftOfArrowHead = position.left;
+        leftOfArrowCenter = position.left / 2;
         topOfArrowHead = position.top + Math.sin(properties.degree) * settings.arrowSize.width + Math.cos(properties.degree) * settings.arrowSize.height;
+        topOfArrowCenter = position.top + Math.sin(properties.degree) * settings.arrowSize.width / 2 + Math.cos(properties.degree) * settings.arrowSize.height;
     }
 
     $(mouses).each(function () {
         var elem = $(this),
             offset = elem.offset();
-        if (leftOfArrowHead >= offset.left && leftOfArrowHead <= offset.left + elem.outerWidth() && topOfArrowHead >= offset.top && topOfArrowHead <= offset.top + elem.outerHeight()) {
+        if ((leftOfArrowHead >= offset.left &&
+             leftOfArrowHead <= offset.left + elem.outerWidth() &&
+             topOfArrowHead >= offset.top &&
+             topOfArrowHead <= offset.top + elem.outerHeight()) ||
+                (leftOfArrowCenter >= offset.left &&
+                 leftOfArrowCenter <= offset.left + elem.outerWidth() &&
+                 topOfArrowCenter >= offset.top &&
+                 topOfArrowCenter <= offset.top + elem.outerHeight())) {
             mouse = $(this);
         }
     });
@@ -106,6 +124,7 @@ function moveArrow(target, position, properties) {
     if (mouse) {
         mouse.remove();
         target.remove();
+        screen.addScore();
         return;
     }
 

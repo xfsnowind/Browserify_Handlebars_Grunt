@@ -2,7 +2,7 @@
 /*jslint node: true*/
 // This file is the enterance and controller of the project
 "use strict";
-var paint = require("./paint"),
+var paint = require("./screen"),
     bunny = require("./bunny"),
     mouse = require("./mouse"),
     settings = require("./settings"),

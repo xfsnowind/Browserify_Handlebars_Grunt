@@ -5,6 +5,11 @@ module.exports =  {
         width: 640
     },
 
+    castleSize: {
+        height: 105,
+        width: 109
+    },
+
     bunnySize: {
         height: 46,
         width: 64
