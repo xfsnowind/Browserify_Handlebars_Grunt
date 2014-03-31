@@ -6,7 +6,7 @@ var $ = require("jquery"),
     common = require("./common"),
     settings = require("./settings.js"),
     screen = require("./screen"),
-    bunnyNamesArray = ["", "2"];
+    gameScore = require("./gamescore.js");
 
 function getBunny() {
     return $("#bunny");
@@ -122,6 +122,7 @@ function moveArrow(target, position, properties) {
         mouse.remove();
         target.remove();
         screen.addScore();
+        gameScore.increaseNumberOfShotMouse();
         return;
     }
 
@@ -192,6 +193,7 @@ function registerMouseRotateEvents() {
             arrowDegree = calculateDegreeMouseWithBunny(event, bunnyCenterPosition),
             arrow = common.generateNewTarget("arrow");
         common.rotateTarget(arrow, arrowDegree);
+        gameScore.increaseNumberOfArrow();
         moveArrow(arrow, {
             left: bunnyCenterPosition.left,
             top: bunnyCenterPosition.top
