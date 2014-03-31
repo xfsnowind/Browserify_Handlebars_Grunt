@@ -3,8 +3,7 @@
 "use strict";
 var lodash = require("lodash"),
     $ = require("jquery"),
-    settings = require("./settings.js"),
-    maxNumber = 10000;
+    settings = require("./settings.js");
 
 function moveTarget(target, newPostion) {
     var newCssStyle = lodash.clone(newPostion);
@@ -40,19 +39,9 @@ function rotateTarget(target, degrees) {
     });
 }
 
-function generanteNewNumber(numberObject) {
-    if (numberObject.number >= maxNumber) {
-        return 0;
-    }
-    numberObject.number += 1;
-
-    return numberObject.number;
-}
-
-function generateNewTarget(targetName, numberObject) {
+function generateNewTarget(targetName) {
     var screen = $("#screen"),
-        uniqueId = generanteNewNumber(numberObject).toString(),
-        newTarget = $("<div></div>").attr("id", targetName + "-" + uniqueId);
+        newTarget = $("<div></div>").attr("class", targetName);
     screen.append(newTarget);
     return newTarget;
 }

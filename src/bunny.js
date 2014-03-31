@@ -6,10 +6,7 @@ var $ = require("jquery"),
     common = require("./common"),
     settings = require("./settings.js"),
     screen = require("./screen"),
-    bunnyNamesArray = ["", "2"],
-    arrowNumber = {
-        number: 0
-    };
+    bunnyNamesArray = ["", "2"];
 
 function getBunny() {
     return $("#bunny");
@@ -70,7 +67,7 @@ function shotMouse(position, properties) {
         leftOfArrowCenter,
         topOfArrowCenter,
         mouse = false,
-        mouses = $("div[id^='mouse-']");
+        mouses = $("div.mouse");
 
     if (properties.degree <= Math.PI / 2 && properties.degree > 0) {
         leftOfArrowHead = position.left + Math.cos(properties.degree) * (settings.arrowSize.width + properties.speed) + Math.sin(properties.degree) * settings.arrowSize.height;
@@ -143,7 +140,6 @@ function moveArrow(target, position, properties) {
         }
     });
     target.css(newCssStyle);
-    common.rotateTarget(target, properties.degree * 180 / Math.PI);
     setTimeout(function () {
         moveArrow(target, newCssStyle, properties);
     }, settings.arrowMoveInterval);
@@ -183,10 +179,7 @@ function registerMouseRotateEvents() {
                 left: parseInt(bunny.css('left'), 10) + settings.bunnySize.width / 2,
                 top: parseInt(bunny.css('top'), 10) + settings.bunnySize.height / 2
             },
-            degree = calculateDegreeMouseWithBunny(event, {
-                left: bunnyCenterPosition.left,
-                top: bunnyCenterPosition.top
-            });
+            degree = calculateDegreeMouseWithBunny(event, bunnyCenterPosition);
         common.rotateTarget(bunny, degree);
     });
 
@@ -196,12 +189,9 @@ function registerMouseRotateEvents() {
                 left: parseInt(bunny.css('left'), 10) + settings.bunnySize.width / 2,
                 top: parseInt(bunny.css('top'), 10) + settings.bunnySize.height / 2
             },
-            arrowDegree = calculateDegreeMouseWithBunny(event, {
-                left: bunnyCenterPosition.left,
-                top: bunnyCenterPosition.top
-            }),
-            arrow = common.generateNewTarget("arrow", arrowNumber);
-        // changeImage(bunny);
+            arrowDegree = calculateDegreeMouseWithBunny(event, bunnyCenterPosition),
+            arrow = common.generateNewTarget("arrow");
+        common.rotateTarget(arrow, arrowDegree);
         moveArrow(arrow, {
             left: bunnyCenterPosition.left,
             top: bunnyCenterPosition.top

@@ -15,6 +15,16 @@ screenSize {
     width: 640px;
 }
 
+healthbarSize {
+    height: 20px;
+    width: 200px;
+}
+
+healthSize {
+    height: 14px;
+    width: 1px;
+}
+
 bunnySize {
     height: 46px;
     width: 64px;
@@ -44,6 +54,24 @@ body {
     z-index: auto;
 }
 
+#healthbar {
+    @extend healthbarSize;
+    @include backgroundImage("healthbar.png");
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    background-repeat: no-repeat;
+    z-index: 2;
+}
+
+span.health {
+    @extend healthSize;
+    @include backgroundImage('health.png');
+    top: 3px;
+    position: absolute;
+    z-index: 3;
+}
+
 #bunny {
     @extend bunnySize;
     @include backgroundImage("dude.png");
@@ -54,9 +82,12 @@ body {
 }
 
 #score {
-    top: 10px;
+    top: 0px;
     left: 500px;
     position: absolute;
+    font-weight: bold;
+    font-size: 20px;
+    color: brown;
     z-index: 3;
 }
 
@@ -69,14 +100,14 @@ div.castle {
   z-index: 2;
 }
 
-div[id^='arrow-'] {
+div.arrow {
   @include backgroundImage("bullet.png");
   @extend arrowSize;
   position: absolute;
   z-index: 2;
 }
 
-div[id^='mouse'] {
+div.mouse {
   @include backgroundImage("badguy.png");
   @extend mouseSize;
   position: absolute;

@@ -12,7 +12,7 @@ var paint = require("./screen"),
     };
 
 function keepGenerateMouse() {
-    var newMouse = common.generateNewTarget("mouse", index);
+    var newMouse = common.generateNewTarget("mouse");
     mouse.move(newMouse, {
         left: settings.screenSize.width - settings.mouseSize.width,
         top:  Math.floor((Math.random() * (settings.screenSize.height - 60 - settings.mouseSize.height)) + 30)

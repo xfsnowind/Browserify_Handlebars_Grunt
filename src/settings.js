@@ -32,5 +32,10 @@ module.exports =  {
     mouseSpeed: 10,
     mouseMoveInterval: 60,
     mouseChangeImageInterval: 600,
-    mouseGenerateInterval: 1000
+    mouseGenerateInterval: 1000,
+
+    healthbarSize: {
+        width: 200,
+        height: 20
+    }
 };
