@@ -44,5 +44,12 @@ module.exports = {
             return value + "px";
         });
         target.css(newCssStyle);
+    },
+
+    //the angle it returns is represented in degrees given in 180, not radians
+    //This is originaly for css animate "rotate", it use degree, but for javascript  Math object,
+    //it's supposed to use radians
+    calculateDegreeToBunny: function (mouseEvent, targetPosition) {
+        return Math.atan2((mouseEvent.pageY - targetPosition.top), (event.pageX - targetPosition.left)) * 180 / Math.PI;
     }
 };
