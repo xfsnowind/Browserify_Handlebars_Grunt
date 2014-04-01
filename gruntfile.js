@@ -7,14 +7,18 @@ module.exports = function(grunt) {
                 src: ["src/**/*.js"],
                 dest: "www/main.js",
                 options: {
-                    debug: true
+                    bundleOptions: {
+                        debug: true
+                    }
                 }
             },
             test: {
                 src: ["test/specs/*.js"],
                 dest: "test/testmain.js",
                 options: {
-                    debug: true
+                    bundleOptions: {
+                        debug: true
+                    }
                 }
             },
             release: {

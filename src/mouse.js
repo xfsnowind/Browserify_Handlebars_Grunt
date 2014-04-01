@@ -7,6 +7,10 @@ var $ = require("jquery"),
     screen = require("./screen"),
     mouseNameArray = ["", "2", "3", "4"];
 
+function getMice() {
+    return $("div.mouse");
+}
+
 function reachCastle(position) {
     var leftOfMouseHead = position.left;
 
