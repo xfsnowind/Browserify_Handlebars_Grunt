@@ -30,7 +30,7 @@ module.exports = {
     },
 
     increaseNumberOfMouse: function () {
-        numberOfMouse++;
+        numberOfMouse += 1;
     },
 
     getNumberOfShotMouse: function () {
@@ -38,7 +38,7 @@ module.exports = {
     },
 
     increaseNumberOfShotMouse: function () {
-        numberOfShotMouse++;
+        numberOfShotMouse += 1;
     },
 
     getNumberOfArrow: function () {
@@ -46,6 +46,6 @@ module.exports = {
     },
 
     increaseNumberOfArrow: function () {
-        numberOfArrow++;
+        numberOfArrow += 1;
     }
 };

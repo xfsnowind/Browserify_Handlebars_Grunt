@@ -173,6 +173,18 @@ function calculateDegreeMouseWithBunny(event, bunnyCenterPosition) {
     return Math.atan2((event.pageY - bunnyCenterPosition.top), (event.pageX - bunnyCenterPosition.left)) * 180 / Math.PI;
 }
 
+function registerKeyEvents() {
+    $(document).on("keydown", function (event) {
+        var bunny = getBunny(),
+            keyMovementMap = getBunnyPosition(bunny);
+        if (13 === event.keyCode) {
+            event.preventDefault();
+        } else if (keyMovementMap[event.keyCode.toString()]) {
+            common.moveTarget.apply(null, [bunny, keyMovementMap[event.keyCode.toString()]]);
+        }
+    });
+}
+
 function registerMouseRotateEvents() {
     $(document).on("mousemove", function (event) {
         var bunny = getBunny(),

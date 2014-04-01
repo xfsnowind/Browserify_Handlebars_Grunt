@@ -1,10 +1,16 @@
 <div id="screen">
-  {{#each castles}}
-  <div class="castle"></div>
-  {{/each}}
-  <div id="bunny"></div>
-  <div id="score">
-    Score: <span>0</span>
-  </div>
-  <div id="healthbar"></div>
+    {{#each castles}}
+    <div class="castle"></div>
+    {{/each}}
+
+    <div id="healthbar">
+        {{#each scores}}
+        <span class="health" style={{style}}></span>
+        {{/each}}
+    </div>
+
+    <div id="bunny"></div>
+    <div id="score">
+        Score: <span>0</span>
+    </div>
 </div>

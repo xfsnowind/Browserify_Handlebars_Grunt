@@ -117,6 +117,14 @@ module.exports = function(grunt) {
             release: ["webkitbuilds/releases"]
         },
 
+        bump: {
+                options: {
+                files: ['package.json'],
+                pushTo: 'origin',
+                commitFiles: ['package.json']
+            }
+        },
+
         mochaTest: {
           test: {
             options: {
@@ -174,6 +182,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-bump');
     grunt.loadNpmTasks('grunt-jslint');
     grunt.loadNpmTasks('grunt-mocha');
     grunt.loadNpmTasks('grunt-mocha-test');

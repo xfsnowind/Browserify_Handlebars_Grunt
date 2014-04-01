@@ -75,6 +75,7 @@ span.health {
 #bunny {
     @extend bunnySize;
     @include backgroundImage("dude.png");
+    background-repeat: no-repeat;
     position: absolute;
     left: 6em;
     top: 6em;
@@ -92,12 +93,13 @@ span.health {
 }
 
 div.castle {
-  @include backgroundImage("castle.png");
-  @extend castleSize;
-  position: relative;
-  left: $castleLeft;
-  top: $firstCastleTop;
-  z-index: 2;
+    @include backgroundImage("castle.png");
+    background-repeat: no-repeat;
+    @extend castleSize;
+    position: relative;
+    left: $castleLeft;
+    top: $firstCastleTop;
+    z-index: 2;
 }
 
 div.arrow {

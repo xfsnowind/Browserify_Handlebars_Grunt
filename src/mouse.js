@@ -4,12 +4,14 @@
 var $ = require("jquery"),
     lodash = require("lodash"),
     settings = require("./settings"),
+    screen = require("./screen"),
     mouseNameArray = ["", "2", "3", "4"];
 
 function reachCastle(position) {
-    var leftOfArrowHead = position.left;
+    var leftOfMouseHead = position.left;
 
-    if (leftOfArrowHead <= settings.castleSize.width / 2) {
+    if (leftOfMouseHead <= settings.castleSize.width / 2) {
+        screen.reduceHealth();
         return true;
     }
     return false;
