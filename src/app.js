@@ -24,26 +24,24 @@ function arrowReachBoundsCallbackFunc(arrow) {
 }
 
 function checkAllArrows(allArrows, shotMouseFunc, reachBoundsFunc) {
-    return lazy.generate(function () {
-        var allTargetProperties = lazy(allArrows).map(common.getTargetProperties);
-        return allTargetProperties.filter(function (targetProperties) {
+    var arrows = lazy(allArrows);
+        arrows.map(common.getTargetProperties)
+        .filter(function (targetProperties) {
             return Bunny.arrowShotMouse(targetProperties, shotMouseFunc);
         }).filter(function (targetProperties) {
             return Bunny.arrowReachBounds(targetProperties, reachBoundsFunc);
-        });
-    });
+        }).each(common.moveTarget);
 }
 
 function checkAndAnimate() {
-    var test = checkAllArrows(Bunny.getAllArrows(), shotMouseCallbackFunc, arrowReachBoundsCallbackFunc);
-    test.each(common.moveTarget);
+    checkAllArrows(Bunny.getAllArrows(), shotMouseCallbackFunc, arrowReachBoundsCallbackFunc);
 
     // lazy(mouse.getAllMice)
     //     .map(getTargetProperties)
     //     .filter(mouse.mouseReachCastle)
     //     .each(common.moveTarget);
 
-    // setTimeout(checkAndAnimate, settings.mouseMoveInterval);
+    setTimeout(checkAndAnimate, settings.mouseMoveInterval);
 }
 
 function keepGenerateMouse() {
@@ -85,6 +83,6 @@ screen.init();
 registerKeyEvents();
 registerMouseEvents();
 // setInterval(keepGenerateMouse, settings.mouseGenerateInterval);
-// checkAndAnimate();
+checkAndAnimate();
 // setTimeout(checkAndAnimate, settings.mouseMoveInterval);
-setTimeout(checkAndAnimate, 1000);
+// setTimeout(checkAndAnimate, 1000);
