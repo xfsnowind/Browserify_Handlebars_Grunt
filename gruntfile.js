@@ -158,13 +158,7 @@ module.exports = function(grunt) {
                     port: 9000,
                     base: "www"
                 }
-            // },
-            // test: {
-            //     options: {
-            //         port: 9002,
-            //         base: "."
-            //     }
-            }
+           }
         },
 
         nodewebkit: {
@@ -202,10 +196,8 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test_part', [
-        // 'connect:test',
         'mochaTest',
-        'browserify:test',
-        // 'mocha:default'
+        'browserify:test'
     ]);
 
     grunt.registerTask('build', [
@@ -228,9 +220,7 @@ module.exports = function(grunt) {
         'build',
         'browserify:debug',
         'browserify:test',
-        'mochaTest',
-        // 'connect:test',
-        // 'mocha:default'
+        'mochaTest'
     ]);
 
     grunt.registerTask('default', [
@@ -247,7 +237,6 @@ module.exports = function(grunt) {
         "build",
         "build_for_release",
         "test_part",
-        "nodewebkit",
-        // "copy:release"
+        "nodewebkit"
     ]);
 };

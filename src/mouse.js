@@ -4,47 +4,7 @@
 var $ = require("jquery"),
     lodash = require("lodash"),
     settings = require("./settings"),
-    screen = require("./screen"),
     mouseNameArray = ["", "2", "3", "4"];
-
-function getMice() {
-    return $("div.mouse");
-}
-
-function reachCastle(position) {
-    var leftOfMouseHead = position.left;
-
-    if (leftOfMouseHead <= settings.castleSize.width / 2) {
-        screen.reduceHealth();
-        return true;
-    }
-    return false;
-}
-
-function moveMouse(target, position) {
-    var newCssStyle = {
-            left: parseInt(position.left, 10),
-            top: parseInt(position.top, 10)
-        };
-    if (reachCastle(newCssStyle)) {
-        target.remove();
-        return;
-    }
-
-    newCssStyle = lodash.mapValues(newCssStyle, function (value, key) {
-        if ("left" === key) {
-            return value - settings.mouseSpeed + "px";
-        }
-
-        if ("top" === key) {
-            return value + "px";
-        }
-    });
-    target.css(newCssStyle);
-    setTimeout(function () {
-        moveMouse(target, newCssStyle);
-    }, settings.mouseMoveInterval);
-}
 
 function changeMouseImageFrequently(mouse) {
     var index = 0;
@@ -59,5 +19,27 @@ function changeMouseImageFrequently(mouse) {
 
 module.exports = {
     change: changeMouseImageFrequently,
-    move: moveMouse
+
+    getMice: function () {
+        return $("div.mouse");
+    },
+
+    reachCastle: function (mouseProperties, reachCastleFunc) {
+        var leftOfMouseHead = mouseProperties.left;
+
+        if (leftOfMouseHead <= settings.castleSize.width / 2) {
+            reachCastleFunc(mouseProperties.target);
+            return false;
+        }
+        return true;
+    },
+
+    getMouseNewPosition: function (mouseProperties) {
+        var newCssStyle = {};
+        newCssStyle.left = mouseProperties.left - mouseProperties.speed;
+        newCssStyle.top = mouseProperties.top;
+        newCssStyle.target = mouseProperties.target;
+        return newCssStyle;
+
+    }
 };

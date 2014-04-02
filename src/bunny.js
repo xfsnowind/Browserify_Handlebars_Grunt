@@ -4,54 +4,21 @@
 var $ = require("jquery"),
     lodash = require("lodash"),
     common = require("./common"),
-    settings = require("./settings"),
-    screen = require("./screen"),
-    gameScore = require("./gamescore");
+    settings = require("./settings");
 
-function arrowReachBounds(targetProperties) {
+function calculateArrowHeadProperty(arrowProperties) {
     //here the degree is supposed to be radians, not degree
-    var degree = targetProperties.degree,
-        sinValue = Math.sin(degree),
-        cosValue = Math.cos(degree),
-        arrowWidth = settings.arrowSize.width,
-        arrowHeight = settings.arrowSize.height,
-        left = targetProperties.left,
-        top = targetProperties.top,
-        leftOfArrowHead,
-        topOfArrowHead;
-
-    if (degree <= Math.PI / 2 && degree > 0) {
-        leftOfArrowHead = left + cosValue * (arrowWidth + settings.arrowSpeed) + sinValue * arrowHeight;
-        topOfArrowHead = top + sinValue * arrowWidth + cosValue * arrowHeight;
-    } else if (degree <= 0 && degree > -Math.PI / 2) {
-        leftOfArrowHead = left + cosValue * (arrowWidth + settings.arrowSpeed) + sinValue * arrowHeight;
-        topOfArrowHead = top + sinValue * settings.arrowSpeed;
-    } else if (degree <= -Math.PI / 2) {
-        leftOfArrowHead = left;
-        topOfArrowHead = top + sinValue * settings.arrowSpeed;
-    } else if (degree > Math.PI / 2) {
-        leftOfArrowHead = left;
-        topOfArrowHead = top + sinValue * arrowWidth + cosValue * arrowHeight;
-    }
-
-    if (leftOfArrowHead <= 0 || leftOfArrowHead >= arrowWidth || topOfArrowHead <= 0 || topOfArrowHead >= arrowHeight) {
-        return false;
-    }
-    return true;
-}
-
-function calculateArrowHeadProperty(targetProperties) {
     var leftOfArrowHead,
         topOfArrowHead,
         leftOfArrowCenter,
         topOfArrowCenter,
-        degree = targetProperties.degree,
+        degree = arrowProperties.degree,
         sinValue = Math.sin(degree),
         cosValue = Math.cos(degree),
         arrowWidth = settings.arrowSize.width,
         arrowHeight = settings.arrowSize.height,
-        left = targetProperties.left,
-        top = targetProperties.top;
+        left = arrowProperties.left,
+        top = arrowProperties.top;
 
     if (degree <= Math.PI / 2 && degree > 0) {
         leftOfArrowHead = left + cosValue * (arrowWidth + settings.arrowSpeed) + sinValue * arrowHeight;
@@ -82,83 +49,6 @@ function calculateArrowHeadProperty(targetProperties) {
     };
 }
 
-function arrowShotMouse(targetProperties, shotMouseFunc) {
-    var arrowProperty = calculateArrowHeadProperty(targetProperties),
-        mouse,
-        mouses = $("div.mouse");
-
-    mouse = lodash.find(mouses, function () {
-        var elem = $(this).detach(),
-            offset = elem.offset();
-        if ((arrowProperty.leftOfArrowHead >= offset.left &&
-             arrowProperty.leftOfArrowHead <= offset.left + elem.outerWidth() &&
-             arrowProperty.topOfArrowHead >= offset.top &&
-             arrowProperty.topOfArrowHead <= offset.top + elem.outerHeight()) ||
-                (arrowProperty.leftOfArrowCenter >= offset.left &&
-                 arrowProperty.leftOfArrowCenter <= offset.left + elem.outerWidth() &&
-                 arrowProperty.topOfArrowCenter >= offset.top &&
-                 arrowProperty.topOfArrowCenter <= offset.top + elem.outerHeight())) {
-            return $(this);
-        }
-    });
-    if (mouse) {
-        shotMouseFunc(mouse, targetProperties.target);
-        return false;
-    }
-    // $(mouses).each(function () {
-    //     var elem = $(this),
-    //         offset = elem.offset();
-    //     if ((leftOfArrowHead >= offset.left &&
-    //          leftOfArrowHead <= offset.left + elem.outerWidth() &&
-    //          topOfArrowHead >= offset.top &&
-    //          topOfArrowHead <= offset.top + elem.outerHeight()) ||
-    //             (leftOfArrowCenter >= offset.left &&
-    //              leftOfArrowCenter <= offset.left + elem.outerWidth() &&
-    //              topOfArrowCenter >= offset.top &&
-    //              topOfArrowCenter <= offset.top + elem.outerHeight())) {
-    //         mouse = $(this);
-    //     }
-    // });
-
-    return true;
-}
-
-// function moveArrow(target, position, properties) {
-//     var moveX = Math.cos(properties.degree) * settings.arrowSpeed,
-//         moveY = sinValuedegree) * settings.arrowSpeed,
-//         newCssStyle = {
-//             left: parseInt(position.left, 10),
-//             top: parseInt(position.top, 10)
-//         },
-//         mouse = shotMouse(newCssStyle, properties);
-
-//     if (mouse) {
-//         mouse.remove();
-//         target.remove();
-//         screen.addScore();
-//         gameScore.increaseNumberOfShotMouse();
-//         return;
-//     }
-
-//     if (reachBounds(newCssStyle, properties)) {
-//         target.remove();
-//         return;
-//     }
-
-//     newCssStyle = lodash.mapValues(newCssStyle, function (value, key) {
-//         if ("left" === key) {
-//             return value + moveX + "px";
-//         }
-
-//         if ("top" === key) {
-//             return value + moveY + "px";
-//         }
-//     });
-//     target.css(newCssStyle);
-//     setTimeout(function () {
-//         moveArrow(target, newCssStyle, properties);
-//     }, settings.arrowMoveInterval);
-// }
 
 function changeImage(target) {
     target.css("background-image", 'url("resources/images/dude2.png")');
@@ -206,5 +96,57 @@ module.exports = {
                 top: bunnyPostion.top + settings.bunnyMoveSpeed
             }
         };
+    },
+
+    arrowShotMouse: function arrowShotMouse(arrowProperties, shotMouseFunc) {
+        var arrowProperty = calculateArrowHeadProperty(arrowProperties),
+            foundMouse,
+            mice = $("div.mouse");
+
+        foundMouse = lodash.find(mice, function (mouse) {
+            var elem = $(mouse),//.detach(),
+                mouseLeft = parseInt(elem.css("left"), 10),
+                mouseTop = parseInt(elem.css("top"), 10);
+            if ((arrowProperty.leftOfArrowHead >= mouseLeft &&
+                 arrowProperty.leftOfArrowHead <= mouseLeft + elem.outerWidth() &&
+                 arrowProperty.topOfArrowHead >= mouseTop &&
+                 arrowProperty.topOfArrowHead <= mouseTop + elem.outerHeight()) ||
+                    (arrowProperty.leftOfArrowCenter >= mouseLeft &&
+                     arrowProperty.leftOfArrowCenter <= mouseLeft + elem.outerWidth() &&
+                     arrowProperty.topOfArrowCenter >= mouseTop &&
+                     arrowProperty.topOfArrowCenter <= mouseTop + elem.outerHeight())) {
+                return true;
+            }
+            return false;
+        });
+        if (foundMouse) {
+            shotMouseFunc(foundMouse, arrowProperties.target);
+            return undefined;
+        }
+        return lodash.assign({
+            leftOfArrowHead: arrowProperty.leftOfArrowHead,
+            topOfArrowHead: arrowProperty.topOfArrowHead
+        }, arrowProperties);
+    },
+
+    arrowReachBounds: function (arrowProperties, reachBoundFunc) {
+        if (arrowProperties.leftOfArrowHead <= 0 || arrowProperties.leftOfArrowHead >= settings.screenSize.width || arrowProperties.topOfArrowHead <= 0 || arrowProperties.topOfArrowHead >= settings.screenSize.height) {
+            reachBoundFunc(arrowProperties.target);
+            return false;
+        }
+        return true;
+    },
+
+    getArrowNewPosition: function (arrowProperties) {
+        var newCssStyle = {};
+        if (arrowProperties.degree) {
+            newCssStyle.left = arrowProperties.left + Math.cos(arrowProperties.degree) * arrowProperties.speed;
+            newCssStyle.top = arrowProperties.top + Math.sin(arrowProperties.degree) * arrowProperties.speed;
+        } else {
+            newCssStyle.left = arrowProperties.left + arrowProperties.speed;
+            newCssStyle.top = arrowProperties.top + arrowProperties.speed;
+        }
+        newCssStyle.target = arrowProperties.target;
+        return newCssStyle;
     }
 };

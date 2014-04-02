@@ -6,29 +6,44 @@ var lodash = require("lodash"),
     settings = require("./settings.js");
 
 function getTargetDegree(target) {
-    var degree = target.css("-webkit-transform") ||
+    var matrix = target.css("-webkit-transform") ||
         target.css("-moz-transform") ||
         target.css("-ms-transform") ||
         target.css("-o-transform") ||
-        target.css("transform");
+        target.css("transform"),
+        angle,
+        values,
+        a, b;
 
-    return degree ? degree.substring(7, degree.length - 4) : degree;
+    if (matrix !== 'none') {
+        values = matrix.split('(')[1].split(')')[0].split(',');
+        a = values[0];
+        b = values[1];
+        angle = Math.atan2(b, a);
+    } else {
+        angle = 0;
+    }
+    return angle;
 }
 
 module.exports = {
-    getTargetProperties: function (target) {
+    getTargetProperties: function (target, speed) {
         return {
             target: target,
             width: parseInt(target.css("width"), 10),
             height: parseInt(target.css("height"), 10),
             left: parseInt(target.css("left"), 10),
             top: parseInt(target.css("top"), 10),
-            degree: getTargetDegree(target)
+            degree: getTargetDegree(target),
+            speed: speed
         };
     },
 
-    generateNewTarget: function (targetName) {
+    generateNewTarget: function (targetName, originalPosition) {
         var newTarget = $("<div></div>").attr("class", targetName);
+        if (originalPosition) {
+            newTarget.css(originalPosition);
+        }
         $("#screen").append(newTarget);
         return newTarget;
     },
@@ -36,11 +51,13 @@ module.exports = {
     /*The input of degrees it accepts should be represented in angle given in 180 degree*/
     rotateTarget: function (target, degrees) {
         target.css({
-        // For webkit browsers: e.g. Chrome
+            // For webkit browsers: e.g. Chrome
             '-webkit-transform' : 'rotate('  +  degrees  +  'deg)',
-        // For Mozilla browser: e.g. Firefox
+            // For Mozilla browser: e.g. Firefox
             '-moz-transform' : 'rotate(' + degrees + 'deg)',
+            //ie
             '-ms-transform' : 'rotate(' + degrees + 'deg)',
+            //opera
             '-o-transform' : 'rotate(' + degrees + 'deg)',
             'transform' : 'rotate(' + degrees + 'deg)',
             'zoom' : 1
@@ -61,16 +78,8 @@ module.exports = {
             newCssStyle.top = settings.screenSize.height - targetProperties.height;
         }
 
-        if (targetProperties.degree) {
-            newCssStyle.left += Math.cos(targetProperties.degree) * settings.arrowSpeed;
-            newCssStyle.top += Math.sin(targetProperties.degrees) * settings.arrowSpeed;
-        }
-
         if (targetProperties.target) {
-            targetProperties.target.css({
-                left: newCssStyle.left + "px",
-                top: newCssStyle.top + "px"
-            });
+            targetProperties.target.css(newCssStyle);
         }
     },
 
