@@ -11,14 +11,14 @@ var $ = require("jquery"),
     settings = require("./settings"),
     common = require("./common"),
     gameScore = require("./gamescore"),
-    timeGenerateMouse,
-    timeCheckAnimate;
+    timerGenerateMouse,
+    checkAnimation = true;
 
 function shotMouseCallbackFunc(mouse, arrow) {
     mouse.remove();
     arrow.remove();
-    screen.addScore();
     gameScore.increaseNumberOfShotMouse();
+    screen.showScore(gameScore.getScore());
 }
 
 function arrowReachBoundsCallbackFunc(arrow) {
@@ -40,9 +40,17 @@ function checkAllArrows(allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
         .each(common.moveTarget);
 }
 
+function gameLose() {
+    checkAnimation = false;
+    clearInterval(timerGenerateMouse);
+    $(document).off("mousemove").off("click").off("keydown");
+    screen.showGameover();
+    // screen.startPage();
+}
+
 function mouseReachCastleCallbackFunc(mouse) {
     mouse.remove();
-    screen.reduceHealth();
+    gameScore.reduceHealthValueAndCheck(screen.reduceHealth, gameLose);
 }
 
 function checkAllMice(allMice, reachCastleFunc, mouseSpeed) {
@@ -61,8 +69,9 @@ function checkAndAnimate() {
     checkAllArrows(Bunny.getAllArrows(), shotMouseCallbackFunc, arrowReachBoundsCallbackFunc, settings.arrowSpeed);
 
     checkAllMice(Mouse.getMice(), mouseReachCastleCallbackFunc, settings.mouseSpeed);
-
-    timeCheckAnimate = setTimeout(checkAndAnimate, settings.refreshInterval);
+    if (checkAnimation) {
+        setTimeout(checkAndAnimate, settings.refreshInterval);
+    }
 }
 
 function keepGenerateMouse() {
@@ -108,7 +117,7 @@ module.exports = {
         screen.init();
         registerKeyEvents();
         registerMouseEvents();
-        timeGenerateMouse = setInterval(keepGenerateMouse, settings.mouseGenerateInterval);
+        timerGenerateMouse = setInterval(keepGenerateMouse, settings.mouseGenerateInterval);
         checkAndAnimate();
     }
 };

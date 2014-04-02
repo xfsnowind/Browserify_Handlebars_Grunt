@@ -15,6 +15,11 @@ screenSize {
     width: 640px;
 }
 
+gameoverSize {
+    height: 480px;
+    width: 640px;
+}
+
 healthbarSize {
     height: 20px;
     width: 200px;
@@ -52,6 +57,16 @@ body {
     @include backgroundImage("grass.png");
     background-repeat: repeat;
     z-index: auto;
+}
+
+#gameover {
+    @extend gameoverSize;
+    @include backgroundImage("gameover.png");
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    display: none;
 }
 
 #healthbar {

@@ -24,14 +24,15 @@ module.exports = {
         fillHTML("#content", html);
     },
 
-    addScore: function () {
-        var score = gameScore.getScore();
-        score += 100;
-        gameScore.setScore(score);
-        $("#score span").text(score);
+    showScore: function (value) {
+        $("#score span").text(value);
     },
 
-    reduceHealth: function () {
-        $("span.health:gt(-20)").remove();
+    reduceHealth: function (value) {
+        $("span.health:gt(-" + parseInt(value, 10) + ")").remove();
+    },
+
+    showGameover: function () {
+        $("#gameover").css("display", "block");
     }
 };

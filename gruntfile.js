@@ -48,12 +48,6 @@ module.exports = function(grunt) {
             package: {
                 src: "package.json",
                 dest: 'www/'
-            // },
-            // release: {
-            //     cwd: "webkitbuilds/releases/nodewebkitapp/",
-            //     expand: true,
-            //     src: ["**/*"],
-            //     dest: "bin/"
             }
         },
 
@@ -79,15 +73,11 @@ module.exports = function(grunt) {
         },
 
         jslint: {
-           ci: {
+            ci: {
                 src: [
                     'src/*.js'
-                ],
-                // options: {
-                //     failOnError: false,
-                //     checkstyle: 'jslint.xml',
-                // }
-           }
+                ]
+            }
         },
 
         watch: {
@@ -112,7 +102,7 @@ module.exports = function(grunt) {
             css: {
                 files: "css/*.scss",
                 tasks: "sass"
-            },
+            }
         },
 
         clean: {
@@ -166,9 +156,9 @@ module.exports = function(grunt) {
                 app_name: "nodewebkitapp",
                 build_dir: "./webkitbuilds",
                 win: true,
-                mac: true,
+                mac: false,
                 linux64: true,
-                linux32: true,
+                linux32: false,
                 keep_nw: true
             },
             src: ["www/**/*"]

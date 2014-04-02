@@ -37,5 +37,9 @@ module.exports =  {
     healthbarSize: {
         width: 200,
         height: 20
-    }
+    },
+
+    healthReducedWhenMouseHitsCastle: 20,
+    scoreWhenShotMouse: 1000
+
 };
