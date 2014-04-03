@@ -39,7 +39,7 @@ module.exports =  {
         height: 20
     },
 
-    healthReducedWhenMouseHitsCastle: 20,
+    healthReducedWhenMouseHitsCastle: 50,
     scoreWhenShotMouse: 1000
 
 };

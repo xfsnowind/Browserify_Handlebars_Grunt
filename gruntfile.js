@@ -54,7 +54,8 @@ module.exports = function(grunt) {
         handlebarsify: {
             compile: {
                files: {
-                   "src/templateJS/screen.js": "src/templates/screen.hbs"
+                   "src/templateJS/screen.js": "src/templates/screen.hbs",
+                   "src/templateJS/start.js": "src/templates/start.hbs"
                }
             },
         },

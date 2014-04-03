@@ -42,21 +42,22 @@ function checkAllArrows(allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
         .each(common.moveTarget);
 }
 
+//calculate the accuracy when game over
 function calculateAccuracy() {
-    return (gameScore.getNumberOfShotMouse() / gameScore.getNumberOfArrow() * 100).toFixed(2);
+    var numberOfArrows = gameScore.getNumberOfArrow();
+    return 0 === numberOfArrows ? 0 : (gameScore.getNumberOfShotMouse() / numberOfArrows * 100).toFixed(2);
 }
 
-function gameLose() {
+function gameOver() {
     checkAnimation = false;
     clearInterval(timerGenerateMouse);
     $(document).off("mousemove").off("click").off("keydown");
-    screen.showGameover(gameScore.getScore(), calculateAccuracy());
-    // screen.startPage();
+    screen.showGameover(gameScore.getScore(), calculateAccuracy(), startGame);
 }
 
 function mouseReachCastleCallbackFunc(mouse) {
     mouse.remove();
-    gameScore.reduceHealthValueAndCheck(screen.reduceHealth, gameLose);
+    gameScore.reduceHealthValueAndCheck(screen.reduceHealth, gameOver);
 }
 
 function checkAllMice(allMice, reachCastleFunc, mouseSpeed) {
@@ -80,7 +81,7 @@ function checkAndAnimate() {
     }
 }
 
-function keepGenerateMouse() {
+function generateMouse() {
     common.generateNewTarget("mouse", {
         left: settings.screenSize.width - settings.mouseSize.width,
         top: Math.floor((Math.random() * (settings.screenSize.height - 60 - settings.mouseSize.height)) + 30)
@@ -118,13 +119,18 @@ function registerMouseEvents() {
     });
 }
 
+function startGame() {
+    gameScore.init();
+    screen.startGame();
+    registerKeyEvents();
+    registerMouseEvents();
+    timerGenerateMouse = setInterval(generateMouse, settings.mouseGenerateInterval);
+    checkAnimation = true;
+    checkAndAnimate();
+}
+
 module.exports = {
     init: function () {
-        screen.init();
-        registerKeyEvents();
-        registerMouseEvents();
-        timerGenerateMouse = setInterval(keepGenerateMouse, settings.mouseGenerateInterval);
-        checkAndAnimate();
+        screen.showStartPage(startGame);
     }
 };
-

@@ -45,11 +45,35 @@ mouseSize {
     width: 64px
 }
 
+button {
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 10px 16px;
+}
+
 body {
     margin: 0;
 }
 
-#content {
+
+button.start{
+    left: 40%;
+    top: 10%;
+    position: relative;
+    color: white;
+    background-color: #ed9c28;
+    border-color: #357ebd;
+    @extend button;
 }
 
 #screen {
@@ -69,12 +93,19 @@ body {
     display: none;
 }
 
-#gameover > p{
+#gameover > p {
     font-size: 30px;
-    color: brown;
+    color: #39b3d7;
     text-align: center;
     position: relative;
     top: 50%;
+}
+
+#gameover .restart {
+    color: white;
+    background-color: #47a447;
+    border-color: #398439;
+    @extend button;
 }
 
 #healthbar {

@@ -10,6 +10,14 @@ var $ = require("jquery"),
     numberOfArrow = 0;
 
 module.exports = {
+    init: function () {
+        healthValue = 194;
+        score = 0;
+        numberOfMouse = 0;
+        numberOfShotMouse = 0;
+        numberOfArrow = 0;
+    },
+
     reduceHealthValueAndCheck : function (displayFunc, callbackFunc) {
         healthValue -= settings.healthReducedWhenMouseHitsCastle;
         displayFunc(settings.healthReducedWhenMouseHitsCastle);
