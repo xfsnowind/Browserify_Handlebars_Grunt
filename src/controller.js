@@ -12,125 +12,125 @@ var $ = require("jquery"),
     common = require("./common"),
     gameScore = require("./gamescore"),
     timerGenerateMouse,
-    checkAnimation = true;
+    checkAnimation = true,
+    functions = {
+        shotMouseCallbackFunc: function (mouse, arrow) {
+            mouse.remove();
+            arrow.remove();
+            gameScore.increaseNumberOfShotMouse();
+            screen.showScore(gameScore.getScore());
+        },
 
-function shotMouseCallbackFunc(mouse, arrow) {
-    mouse.remove();
-    arrow.remove();
-    gameScore.increaseNumberOfShotMouse();
-    screen.showScore(gameScore.getScore());
-}
+        arrowReachBoundsCallbackFunc: function (arrow) {
+            arrow.remove();
+        },
 
-function arrowReachBoundsCallbackFunc(arrow) {
-    arrow.remove();
-}
+        //check all the arrows, if shot mouse and reach bounds, call relevant functions
+        checkAllArrows: function (allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
+            var arrows = lazy(lazy(allArrows).toObject().toArray().map(function (arrow) {
+                return $(arrow);
+            }));
+            arrows.map(function (target) {
+                return common.getTargetProperties(target, arrowSpeed);
+            }).map(function (targetProperties) {
+                return Bunny.arrowShotMouse(targetProperties, shotMouseFunc);
+            }).compact()
+                .filter(function (targetProperties) {
+                    return Bunny.arrowReachBounds(targetProperties, reachBoundsFunc);
+                }).map(Bunny.getArrowNewPosition)
+                .each(common.moveTarget);
+        },
 
+        //calculate the accuracy when game over
+        calculateAccuracy: function () {
+            var numberOfArrows = gameScore.getNumberOfArrow();
+            return 0 === numberOfArrows ? 0 : (gameScore.getNumberOfShotMouse() / numberOfArrows * 100).toFixed(2);
+        },
 
-//check all the arrows, if shot mouse and reach bounds, call relevant functions
-function checkAllArrows(allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
-    var arrows = lazy(lazy(allArrows).toObject().toArray().map(function (arrow) {
-        return $(arrow);
-    }));
-    arrows.map(function (target) {
-        return common.getTargetProperties(target, arrowSpeed);
-    }).map(function (targetProperties) {
-        return Bunny.arrowShotMouse(targetProperties, shotMouseFunc);
-    }).compact()
-        .filter(function (targetProperties) {
-            return Bunny.arrowReachBounds(targetProperties, reachBoundsFunc);
-        }).map(Bunny.getArrowNewPosition)
-        .each(common.moveTarget);
-}
+        gameOver: function () {
+            checkAnimation = false;
+            clearInterval(timerGenerateMouse);
+            $(document).off("mousemove").off("click").off("keydown");
+            screen.showGameover(gameScore.getScore(), functions.calculateAccuracy(), functions.startGame);
+        },
 
-//calculate the accuracy when game over
-function calculateAccuracy() {
-    var numberOfArrows = gameScore.getNumberOfArrow();
-    return 0 === numberOfArrows ? 0 : (gameScore.getNumberOfShotMouse() / numberOfArrows * 100).toFixed(2);
-}
+        mouseReachCastleCallbackFunc: function (mouse) {
+            mouse.remove();
+            gameScore.reduceHealthValueAndCheck(screen.reduceHealth, functions.gameOver);
+        },
 
-function gameOver() {
-    checkAnimation = false;
-    clearInterval(timerGenerateMouse);
-    $(document).off("mousemove").off("click").off("keydown");
-    screen.showGameover(gameScore.getScore(), calculateAccuracy(), startGame);
-}
+        checkAllMice: function (allMice, reachCastleFunc, mouseSpeed) {
+            var mice = lazy(lazy(allMice).toObject().toArray().map(function (mouse) {
+                return $(mouse);
+            }));
+            mice.map(function (target) {
+                return common.getTargetProperties(target, mouseSpeed);
+            }).filter(function (targetProperties) {
+                return Mouse.reachCastle(targetProperties, reachCastleFunc);
+            }).map(Mouse.getMouseNewPosition)
+                .each(common.moveTarget);
+        },
 
-function mouseReachCastleCallbackFunc(mouse) {
-    mouse.remove();
-    gameScore.reduceHealthValueAndCheck(screen.reduceHealth, gameOver);
-}
+        checkAndAnimate: function () {
+            functions.checkAllArrows(Bunny.getAllArrows(), functions.shotMouseCallbackFunc, functions.arrowReachBoundsCallbackFunc, settings.arrowSpeed);
 
-function checkAllMice(allMice, reachCastleFunc, mouseSpeed) {
-    var mice = lazy(lazy(allMice).toObject().toArray().map(function (mouse) {
-        return $(mouse);
-    }));
-    mice.map(function (target) {
-        return common.getTargetProperties(target, mouseSpeed);
-    }).filter(function (targetProperties) {
-        return Mouse.reachCastle(targetProperties, reachCastleFunc);
-    }).map(Mouse.getMouseNewPosition)
-        .each(common.moveTarget);
-}
+            functions.checkAllMice(Mouse.getMice(), functions.mouseReachCastleCallbackFunc, settings.mouseSpeed);
+            if (checkAnimation) {
+                setTimeout(functions.checkAndAnimate, settings.refreshInterval);
+            }
+        },
 
-function checkAndAnimate() {
-    checkAllArrows(Bunny.getAllArrows(), shotMouseCallbackFunc, arrowReachBoundsCallbackFunc, settings.arrowSpeed);
+        generateMouse: function () {
+            common.generateNewTarget("mouse", {
+                left: settings.screenSize.width - settings.mouseSize.width,
+                top: Math.floor((Math.random() * (settings.screenSize.height - 60 - settings.mouseSize.height)) + 30)
+            });
+            gameScore.increaseNumberOfMouse();
+        },
 
-    checkAllMice(Mouse.getMice(), mouseReachCastleCallbackFunc, settings.mouseSpeed);
-    if (checkAnimation) {
-        setTimeout(checkAndAnimate, settings.refreshInterval);
-    }
-}
+        registerKeyEvents: function () {
+            $(document).on("keydown", function (event) {
+                var bunny = Bunny.getBunny(),
+                    keyMovementMap = Bunny.getBunnyNewPosition(bunny);
+                if (13 === event.keyCode) {
+                    event.preventDefault();
+                } else if (keyMovementMap[event.keyCode.toString()]) {
+                    common.moveTarget.apply(null, [lodash.assign({target: bunny}, keyMovementMap[event.keyCode.toString()])]);
+                }
+            });
+        },
 
-function generateMouse() {
-    common.generateNewTarget("mouse", {
-        left: settings.screenSize.width - settings.mouseSize.width,
-        top: Math.floor((Math.random() * (settings.screenSize.height - 60 - settings.mouseSize.height)) + 30)
-    });
-    gameScore.increaseNumberOfMouse();
-}
+        registerMouseEvents: function () {
+            $(document).on("mousemove", function (event) {
+                var bunny = Bunny.getBunny(),
+                    bunnyCenterPosition = Bunny.getBunnyCenterPosition(bunny),
+                    degree = common.calculateDegreeToBunny(event, bunnyCenterPosition);
+                common.rotateTarget(bunny, degree);
+            });
 
-function registerKeyEvents() {
-    $(document).on("keydown", function (event) {
-        var bunny = Bunny.getBunny(),
-            keyMovementMap = Bunny.getBunnyNewPosition(bunny);
-        if (13 === event.keyCode) {
-            event.preventDefault();
-        } else if (keyMovementMap[event.keyCode.toString()]) {
-            common.moveTarget.apply(null, [lodash.assign({target: bunny}, keyMovementMap[event.keyCode.toString()])]);
+            $(document).on("click", function (event) {
+                var bunny = Bunny.getBunny(),
+                    bunnyCenterPosition = Bunny.getBunnyCenterPosition(bunny),
+                    arrowDegree = common.calculateDegreeToBunny(event, bunnyCenterPosition),
+                    arrow = common.generateNewTarget("arrow", bunnyCenterPosition);
+                common.rotateTarget(arrow, arrowDegree);
+                gameScore.increaseNumberOfArrow();
+            });
+        },
+
+        startGame: function () {
+            gameScore.init();
+            screen.startGame();
+            functions.registerKeyEvents();
+            functions.registerMouseEvents();
+            timerGenerateMouse = setInterval(functions.generateMouse, settings.mouseGenerateInterval);
+            checkAnimation = true;
+            functions.checkAndAnimate();
         }
-    });
-}
-
-function registerMouseEvents() {
-    $(document).on("mousemove", function (event) {
-        var bunny = Bunny.getBunny(),
-            bunnyCenterPosition = Bunny.getBunnyCenterPosition(bunny),
-            degree = common.calculateDegreeToBunny(event, bunnyCenterPosition);
-        common.rotateTarget(bunny, degree);
-    });
-
-    $(document).on("click", function (event) {
-        var bunny = Bunny.getBunny(),
-            bunnyCenterPosition = Bunny.getBunnyCenterPosition(bunny),
-            arrowDegree = common.calculateDegreeToBunny(event, bunnyCenterPosition),
-            arrow = common.generateNewTarget("arrow", bunnyCenterPosition);
-        common.rotateTarget(arrow, arrowDegree);
-        gameScore.increaseNumberOfArrow();
-    });
-}
-
-function startGame() {
-    gameScore.init();
-    screen.startGame();
-    registerKeyEvents();
-    registerMouseEvents();
-    timerGenerateMouse = setInterval(generateMouse, settings.mouseGenerateInterval);
-    checkAnimation = true;
-    checkAndAnimate();
-}
+    };
 
 module.exports = {
     init: function () {
-        screen.showStartPage(startGame);
+        screen.showStartPage(functions.startGame);
     }
 };
