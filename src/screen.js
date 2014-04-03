@@ -32,7 +32,9 @@ module.exports = {
         $("span.health:gt(-" + parseInt(value, 10) + ")").remove();
     },
 
-    showGameover: function () {
+    showGameover: function (score, accuracy) {
         $("#gameover").css("display", "block");
+        $("#gameover span:first").text(score);
+        $("#gameover span:last").text(accuracy);
     }
 };

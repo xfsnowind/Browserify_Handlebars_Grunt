@@ -25,6 +25,8 @@ function arrowReachBoundsCallbackFunc(arrow) {
     arrow.remove();
 }
 
+
+//check all the arrows, if shot mouse and reach bounds, call relevant functions
 function checkAllArrows(allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
     var arrows = lazy(lazy(allArrows).toObject().toArray().map(function (arrow) {
         return $(arrow);
@@ -40,11 +42,15 @@ function checkAllArrows(allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
         .each(common.moveTarget);
 }
 
+function calculateAccuracy() {
+    return (gameScore.getNumberOfShotMouse() / gameScore.getNumberOfArrow() * 100).toFixed(2);
+}
+
 function gameLose() {
     checkAnimation = false;
     clearInterval(timerGenerateMouse);
     $(document).off("mousemove").off("click").off("keydown");
-    screen.showGameover();
+    screen.showGameover(gameScore.getScore(), calculateAccuracy());
     // screen.startPage();
 }
 
