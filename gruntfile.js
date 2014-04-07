@@ -7,14 +7,18 @@ module.exports = function(grunt) {
                 src: ["src/**/*.js"],
                 dest: "www/main.js",
                 options: {
-                    debug: true
+                    bundleOptions: {
+                        debug: true
+                    }
                 }
             },
             test: {
                 src: ["test/specs/*.js"],
                 dest: "test/testmain.js",
                 options: {
-                    debug: true
+                    bundleOptions: {
+                        debug: true
+                    }
                 }
             },
             release: {
@@ -44,19 +48,14 @@ module.exports = function(grunt) {
             package: {
                 src: "package.json",
                 dest: 'www/'
-            // },
-            // release: {
-            //     cwd: "webkitbuilds/releases/nodewebkitapp/",
-            //     expand: true,
-            //     src: ["**/*"],
-            //     dest: "bin/"
             }
         },
 
         handlebarsify: {
             compile: {
                files: {
-                   "src/templateJS/screen.js": "src/templates/screen.hbs"
+                   "src/templateJS/screen.js": "src/templates/screen.hbs",
+                   "src/templateJS/start.js": "src/templates/start.hbs"
                }
             },
         },
@@ -75,15 +74,11 @@ module.exports = function(grunt) {
         },
 
         jslint: {
-           ci: {
+            ci: {
                 src: [
                     'src/*.js'
-                ],
-                // options: {
-                //     failOnError: false,
-                //     checkstyle: 'jslint.xml',
-                // }
-           }
+                ]
+            }
         },
 
         watch: {
@@ -108,7 +103,7 @@ module.exports = function(grunt) {
             css: {
                 files: "css/*.scss",
                 tasks: "sass"
-            },
+            }
         },
 
         clean: {
@@ -154,13 +149,7 @@ module.exports = function(grunt) {
                     port: 9000,
                     base: "www"
                 }
-            // },
-            // test: {
-            //     options: {
-            //         port: 9002,
-            //         base: "."
-            //     }
-            }
+           }
         },
 
         nodewebkit: {
@@ -168,9 +157,9 @@ module.exports = function(grunt) {
                 app_name: "nodewebkitapp",
                 build_dir: "./webkitbuilds",
                 win: true,
-                mac: true,
+                mac: false,
                 linux64: true,
-                linux32: true,
+                linux32: false,
                 keep_nw: true
             },
             src: ["www/**/*"]
@@ -198,10 +187,8 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('test_part', [
-        // 'connect:test',
         'mochaTest',
-        'browserify:test',
-        // 'mocha:default'
+        'browserify:test'
     ]);
 
     grunt.registerTask('build', [
@@ -224,9 +211,7 @@ module.exports = function(grunt) {
         'build',
         'browserify:debug',
         'browserify:test',
-        'mochaTest',
-        // 'connect:test',
-        // 'mocha:default'
+        'mochaTest'
     ]);
 
     grunt.registerTask('default', [
@@ -243,7 +228,6 @@ module.exports = function(grunt) {
         "build",
         "build_for_release",
         "test_part",
-        "nodewebkit",
-        // "copy:release"
+        "nodewebkit"
     ]);
 };

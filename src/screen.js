@@ -2,6 +2,7 @@
 /*jslint node: true */
 "use strict";
 var screenTemplate = require("./templateJS/screen"),
+    startPageTemplate = require("./templateJS/start"),
     handlebars = require("handlebars"),
     $ = require("jquery"),
     lodash = require("lodash"),
@@ -13,7 +14,7 @@ function fillHTML(nodeId, content) {
 }
 
 module.exports = {
-    init: function () {
+    startGame: function () {
         var castleTopPotisions = [30, 30, 30, 30],
             scores = [],
             leftmostOfhealth = 3;
@@ -24,14 +25,28 @@ module.exports = {
         fillHTML("#content", html);
     },
 
-    addScore: function () {
-        var score = gameScore.getScore();
-        score += 100;
-        gameScore.setScore(score);
-        $("#score span").text(score);
+    showScore: function (value) {
+        $("#score span").text(value);
     },
 
-    reduceHealth: function () {
-        $("span.health:gt(-20)").remove();
+    reduceHealth: function (value) {
+        $("span.health:gt(-" + parseInt(value, 10) + ")").remove();
+    },
+
+    showGameover: function (score, accuracy, playAgainCallbackFunc) {
+        $("#gameover").css("display", "block");
+        $("#gameover span:first").text(score);
+        $("#gameover span:last").text(accuracy);
+        $("button.restart").click(function () {
+            setTimeout(playAgainCallbackFunc, 0);
+        });
+    },
+
+    showStartPage: function (startGameCallbackFunc) {
+        html = startPageTemplate();
+        fillHTML("#content", html);
+        $("button.start").click(function () {
+            setTimeout(startGameCallbackFunc, 0);
+        });
     }
 };
