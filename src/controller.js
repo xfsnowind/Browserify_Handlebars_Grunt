@@ -27,10 +27,9 @@ var $ = require("jquery"),
 
         //check all the arrows, if shot mouse and reach bounds, call relevant functions
         checkAllArrows: function (allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
-            var arrows = lazy(lazy(allArrows).toObject().toArray().map(function (arrow) {
+            lazy(allArrows.toArray()).map(function (arrow) {
                 return $(arrow);
-            }));
-            arrows.map(function (target) {
+            }).map(function (target) {
                 return common.getTargetProperties(target, arrowSpeed);
             }).map(function (targetProperties) {
                 return Bunny.arrowShotMouse(targetProperties, shotMouseFunc);
@@ -60,10 +59,9 @@ var $ = require("jquery"),
         },
 
         checkAllMice: function (allMice, reachCastleFunc, mouseSpeed) {
-            var mice = lazy(lazy(allMice).toObject().toArray().map(function (mouse) {
+            lazy(allMice.toArray()).map(function (mouse) {
                 return $(mouse);
-            }));
-            mice.map(function (target) {
+            }).map(function (target) {
                 return common.getTargetProperties(target, mouseSpeed);
             }).filter(function (targetProperties) {
                 return Mouse.reachCastle(targetProperties, reachCastleFunc);
