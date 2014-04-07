@@ -5,7 +5,6 @@ Bunny game
 This is my first private javascipt application and also first simple game. The idea is got from this python [program](http://www.raywenderlich.com/24252/beginning-game-programming-for-teens-with-python) whose developer is just a 13-year-old child. I just want to implement it with javascript techniques I learnt these days.
 
 #Installation
-------------
 If you want to build the project yourself, you need [npm](https://npmjs.org) and [Grunt](http://gruntjs.com).  Assuming npm is installed, first install Grunt and dependencies like this:
 
 ```
@@ -31,7 +30,6 @@ You can use the direction up/left/down/right keys to move the bunny up/left/down
 And the bunny will turning according to your mouse, then to shoot, you can left click the mouse.
 
 #Release
--------
 To release the desktop application, type the command:
 ```
  grunt release
@@ -41,7 +39,7 @@ Then go to the folder webkitbuilds/releases/nodewebkitapp/{yoursystem}/nodewebki
 #Libaries
 
 ##Set up
-Browserify, mocha, chai, handlebars, sass,
+Npm, grunt, Browserify, mocha, chai, handlebars, sass,
 
 ##Develop
 Jquery, lodash, lazyjs

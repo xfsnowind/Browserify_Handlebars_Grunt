@@ -63,7 +63,7 @@ module.exports = {
     },
 
     getAllArrows: function () {
-        return $("div.arrow");
+        return $(".arrow");
     },
 
     getBunnyCenterPosition: function (bunny) {
@@ -98,12 +98,11 @@ module.exports = {
         };
     },
 
-    arrowShotMouse: function arrowShotMouse(arrowProperties, shotMouseFunc) {
+    arrowShotMouse: function arrowShotMouse(allMice, arrowProperties, shotMouseFunc) {
         var arrowProperty = calculateArrowHeadProperty(arrowProperties),
-            foundMouse,
-            mice = $("div.mouse");
+            foundMouse;
 
-        foundMouse = lodash.find(mice, function (mouse) {
+        foundMouse = lodash.find(allMice, function (mouse) {
             var elem = $(mouse),//.detach(),
                 mouseLeft = parseInt(elem.css("left"), 10),
                 mouseTop = parseInt(elem.css("top"), 10);

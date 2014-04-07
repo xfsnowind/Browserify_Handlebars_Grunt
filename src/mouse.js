@@ -21,7 +21,7 @@ module.exports = {
     change: changeMouseImageFrequently,
 
     getMice: function () {
-        return $("div.mouse");
+        return $(".mouse");
     },
 
     reachCastle: function (mouseProperties, reachCastleFunc) {

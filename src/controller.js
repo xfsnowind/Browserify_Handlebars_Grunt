@@ -8,31 +8,36 @@ var $ = require("jquery"),
     screen = require("./screen"),
     Bunny = require("./bunny"),
     Mouse = require("./mouse"),
+    Sound = require("./sound"),
     settings = require("./settings"),
     common = require("./common"),
     gameScore = require("./gamescore"),
     timerGenerateMouse,
     checkAnimation = true,
     functions = {
+
+        //the callback function when mouse is shot
         shotMouseCallbackFunc: function (mouse, arrow) {
             mouse.remove();
             arrow.remove();
             gameScore.increaseNumberOfShotMouse();
             screen.showScore(gameScore.getScore());
+            Sound.playExplode();
         },
 
+        //the callback function when arrow reaches bound
         arrowReachBoundsCallbackFunc: function (arrow) {
             arrow.remove();
         },
 
         //check all the arrows, if shot mouse and reach bounds, call relevant functions
-        checkAllArrows: function (allArrows, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
+        checkAllArrows: function (allArrows, allMice, shotMouseFunc, reachBoundsFunc, arrowSpeed) {
             lazy(allArrows.toArray()).map(function (arrow) {
                 return $(arrow);
             }).map(function (target) {
                 return common.getTargetProperties(target, arrowSpeed);
             }).map(function (targetProperties) {
-                return Bunny.arrowShotMouse(targetProperties, shotMouseFunc);
+                return Bunny.arrowShotMouse(allMice, targetProperties, shotMouseFunc);
             }).compact()
                 .filter(function (targetProperties) {
                     return Bunny.arrowReachBounds(targetProperties, reachBoundsFunc);
@@ -53,11 +58,14 @@ var $ = require("jquery"),
             screen.showGameover(gameScore.getScore(), functions.calculateAccuracy(), functions.startGame);
         },
 
+        //the callback function when mouse reaches castle
         mouseReachCastleCallbackFunc: function (mouse) {
+            Sound.playEnemy();
             mouse.remove();
             gameScore.reduceHealthValueAndCheck(screen.reduceHealth, functions.gameOver);
         },
 
+        //check all mice status
         checkAllMice: function (allMice, reachCastleFunc, mouseSpeed) {
             lazy(allMice.toArray()).map(function (mouse) {
                 return $(mouse);
@@ -69,8 +77,9 @@ var $ = require("jquery"),
                 .each(common.moveTarget);
         },
 
+        //check and update all arrows and mices
         checkAndAnimate: function () {
-            functions.checkAllArrows(Bunny.getAllArrows(), functions.shotMouseCallbackFunc, functions.arrowReachBoundsCallbackFunc, settings.arrowSpeed);
+            functions.checkAllArrows(Bunny.getAllArrows(), Mouse.getMice(), functions.shotMouseCallbackFunc, functions.arrowReachBoundsCallbackFunc, settings.arrowSpeed);
 
             functions.checkAllMice(Mouse.getMice(), functions.mouseReachCastleCallbackFunc, settings.mouseSpeed);
             if (checkAnimation) {
@@ -111,12 +120,14 @@ var $ = require("jquery"),
                     bunnyCenterPosition = Bunny.getBunnyCenterPosition(bunny),
                     arrowDegree = common.calculateDegreeToBunny(event, bunnyCenterPosition),
                     arrow = common.generateNewTarget("arrow", bunnyCenterPosition);
+                Sound.playShoot();
                 common.rotateTarget(arrow, arrowDegree);
                 gameScore.increaseNumberOfArrow();
             });
         },
 
         startGame: function () {
+            Sound.stopStartMusic();
             gameScore.init();
             screen.startGame();
             functions.registerKeyEvents();
@@ -130,5 +141,6 @@ var $ = require("jquery"),
 module.exports = {
     init: function () {
         screen.showStartPage(functions.startGame);
+        Sound.playStartMusic();
     }
 };
