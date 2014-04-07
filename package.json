@@ -1,5 +1,5 @@
 {
-    "name": "Browserify_Handlebars_Grunt",
+    "name": "Bunny_game",
     "version": "0.2.0",
     "private": true,
     "devDependencies": {
@@ -29,7 +29,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git@github.com:xfsnowind/Browserify_Handlebars_Grunt.git"
+        "url": "git@github.com:xfsnowind/Bunny_game.git"
     },
     "main": "index.html",
     "window": {
