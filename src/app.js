@@ -14,11 +14,15 @@ function keepGenerateMouse() {
     mouse.move(newMouse, {
         left: settings.screenSize.width - settings.mouseSize.width,
         top:  Math.floor((Math.random() * (settings.screenSize.height - 60 - settings.mouseSize.height)) + 30)
-    });
+    }, screen.showGameover);
     gameScore.increaseNumberOfMouse();
 }
 
-screen.init();
-bunny.registerKeyEvents();
-bunny.registerMouseRotateEvents();
-setInterval(keepGenerateMouse, settings.mouseGenerateInterval);
+function startGame() {
+    screen.init();
+    bunny.registerKeyEvents();
+    bunny.registerMouseRotateEvents();
+    setInterval(keepGenerateMouse, settings.mouseGenerateInterval);
+}
+
+screen.showStartPage(startGame);

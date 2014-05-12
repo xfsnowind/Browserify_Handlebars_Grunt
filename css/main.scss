@@ -1,7 +1,10 @@
+// function defines
+
 @mixin backgroundImage ($filename) {
     background-image: url("resources/images/" + $filename);
 }
 
+// define variables
 $firstCastleTop: 30px;
 $castleLeft: 0px;
 
@@ -30,6 +33,11 @@ bunnySize {
     width: 64px;
 }
 
+gameoverSize {
+    height: 480px;
+    width: 640px;
+}
+
 arrowSize {
     height: 10px;
     width: 42px
@@ -38,6 +46,44 @@ arrowSize {
 mouseSize {
     height: 29px;
     width: 64px
+}
+
+// start.hbs
+.title {
+    margin: 20px;
+}
+
+.description {
+    font-size: 18px;
+    margin: 0 30px;
+    color: brown;
+}
+
+//  main page
+button {
+    font-size: 18px;
+    line-height: 1.33;
+    border-radius: 6px;
+    display: inline-block;
+    margin-bottom: 0;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+    background-image: none;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    padding: 10px 16px;
+}
+
+button.start{
+    left: 40%;
+    top: 10%;
+    position: relative;
+    color: white;
+    background-color: #ed9c28;
+    border-color: #357ebd;
+    @extend button;
 }
 
 body {
@@ -114,4 +160,30 @@ div.mouse {
   @extend mouseSize;
   position: absolute;
   z-index: 2;
+}
+
+
+#gameover {
+    @extend gameoverSize;
+    @include backgroundImage("gameover.png");
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    display: none;
+}
+
+#gameover > p {
+    font-size: 30px;
+    color: #39b3d7;
+    text-align: center;
+    position: relative;
+    top: 50%;
+}
+
+#gameover .restart {
+    color: white;
+    background-color: #47a447;
+    border-color: #398439;
+    @extend button;
 }

@@ -2,6 +2,11 @@
     {{#each castles}}
     <div class="castle"></div>
     {{/each}}
+    <div id="gameover">
+        <p>Score: <span></span></p>
+        <p>Accuracy: <span></span> %</p>
+        <p><button class="restart">Play Again!</button></p>
+    </div>
 
     <div id="healthbar">
         {{#each scores}}

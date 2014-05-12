@@ -11,18 +11,18 @@ function reachCastle(position) {
     var leftOfMouseHead = position.left;
 
     if (leftOfMouseHead <= settings.castleSize.width / 2) {
-        screen.reduceHealth();
+        screen.reduceHealth(20);
         return true;
     }
     return false;
 }
 
-function moveMouse(target, position) {
+function moveMouse(target, position, gameoverFunc) {
     var newCssStyle = {
             left: parseInt(position.left, 10),
             top: parseInt(position.top, 10)
         };
-    if (reachCastle(newCssStyle)) {
+    if (reachCastle(newCssStyle, gameoverFunc)) {
         target.remove();
         return;
     }
@@ -38,7 +38,7 @@ function moveMouse(target, position) {
     });
     target.css(newCssStyle);
     setTimeout(function () {
-        moveMouse(target, newCssStyle);
+        moveMouse(target, newCssStyle, gameoverFunc);
     }, settings.mouseMoveInterval);
 }
 

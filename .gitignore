@@ -6,3 +6,6 @@ www/*.css
 src/templateJS/*.js
 www/*.json
 www/resources/
+deploy/*.json
+deploy/resources/
+bower_components
