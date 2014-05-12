@@ -5,7 +5,7 @@ module.exports = function(grunt) {
         browserify: {
             debug: {
                 src: ["src/**/*.js"],
-                dest: "www/main.js",
+                dest: "deploy/main.js",
                 options: {
                     bundleOptions: {
                         debug: true
@@ -23,7 +23,7 @@ module.exports = function(grunt) {
             },
             release: {
                 src: ["src/**/*.js"],
-                dest: "www/main.js",
+                dest: "deploy/main.js",
             }
         },
 
@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                     noCache: true
                 },
                 files: {
-                    'www/main.css': 'css/main.scss'
+                    'deploy/main.css': 'css/main.scss'
                 }
             }
         },
@@ -43,11 +43,11 @@ module.exports = function(grunt) {
                 cwd: "src/",
                 expand: true,
                 src: ["resources/**/*"],
-                dest: "www/"
+                dest: "deploy/"
             },
             package: {
                 src: "package.json",
-                dest: 'www/'
+                dest: 'deploy/'
             }
         },
 
@@ -107,7 +107,7 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            build: ["src/templateJS/", "www/main.js", "www/main.css", "www/package.json", "www/resources"],
+            build: ["src/templateJS/", "deploy/main.js", "deploy/main.css", "deploy/package.json", "deploy/resources"],
             test: ["test/*.js"],
             release: ["webkitbuilds/releases"]
         },
@@ -147,7 +147,7 @@ module.exports = function(grunt) {
             server: {
                 options: {
                     port: 9000,
-                    base: "www"
+                    base: "deploy"
                 }
            }
         },
@@ -162,7 +162,7 @@ module.exports = function(grunt) {
                 linux32: false,
                 keep_nw: true
             },
-            src: ["www/**/*"]
+            src: ["deploy/**/*"]
         }
     });
 
@@ -182,8 +182,8 @@ module.exports = function(grunt) {
 
     // Default task(s).
     grunt.registerTask('check', [
-        "jshint",
-        "jslint"
+        // "jshint",
+        // "jslint"
     ]);
 
     grunt.registerTask('test_part', [

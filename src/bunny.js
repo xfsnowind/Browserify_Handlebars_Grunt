@@ -77,24 +77,37 @@ module.exports = {
         var bunnyPostion = {
             left: parseInt(bunny.css('left'), 10),
             top: parseInt(bunny.css('top'), 10)
-        };
-        return {
-            37: {
+        },
+            moveToLeft = {
                 left: bunnyPostion.left - settings.bunnyMoveSpeed,
                 top: bunnyPostion.top
             },
-            38: {
+            moveToTop = {
                 left: bunnyPostion.left,
                 top: bunnyPostion.top - settings.bunnyMoveSpeed
             },
-            39: {
+            moveToRight = {
                 left: bunnyPostion.left + settings.bunnyMoveSpeed,
                 top: bunnyPostion.top
             },
-            40: {
+            moveToDown = {
                 left: bunnyPostion.left,
                 top: bunnyPostion.top + settings.bunnyMoveSpeed
-            }
+            };
+
+        return {
+            // left key
+            37: moveToLeft,
+            65: moveToLeft,
+            // up key
+            38: moveToTop,
+            87: moveToTop,
+            // right key
+            39: moveToRight,
+            68: moveToRight,
+            // down key
+            83: moveToDown,
+            40: moveToDown
         };
     },
 
